@@ -1,0 +1,4 @@
+#include "modules/register_module_types.h"
+
+void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level);
+void uninitialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level);
