@@ -3,6 +3,7 @@
 
 #include "core/io/resource.h"
 #include "core/string/ustring.h"
+#include "core/variant/typed_array.h"
 
 class CharacterData final : public Resource {
 	GDCLASS(CharacterData, Resource);
@@ -17,6 +18,8 @@ public:
 
 	void set_data_path(String path);
 	String get_data_path();
+
+	TypedArray<Resource> get_sub_resources(String sub_resource_id);
 };
 
 #endif // CHARACTER_DATA_H

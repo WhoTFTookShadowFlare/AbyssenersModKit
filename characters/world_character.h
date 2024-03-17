@@ -18,7 +18,6 @@ public:
 
 	void set_character_data(Ref<CharacterData> data_ref);
 	Ref<CharacterData> get_character_data();
-
 };
 
 #endif // WORLD_CHARACTER_H
