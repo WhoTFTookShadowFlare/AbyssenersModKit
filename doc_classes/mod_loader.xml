@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="ModLoader" inherits="Node">
+	<brief_description>
+		Singleton for loading external mods.
+	</brief_description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="load_content">
+			<return type="void" />
+			<description>
+				Loads all the mods in the load order.
+			</description>
+	</methods>
+</class>

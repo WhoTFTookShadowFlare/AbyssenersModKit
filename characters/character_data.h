@@ -7,7 +7,6 @@
 
 class CharacterData final : public Resource {
 	GDCLASS(CharacterData, Resource);
-
 protected:
 	static void _bind_methods();
 

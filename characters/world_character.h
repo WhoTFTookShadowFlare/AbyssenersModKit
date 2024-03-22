@@ -7,7 +7,6 @@
 
 class WorldCharacter final : public CharacterBody2D {
 	GDCLASS(WorldCharacter, CharacterBody2D);
-
 protected:
 	static void _bind_methods();
 
