@@ -3,7 +3,7 @@
 #include "core/io/file_access_pack.h"
 #include "scene/resources/packed_scene.h"
 
-#include "mod_init.h"
+#include "../singletons/current_scene.h"
 #include "load_fail.h"
 
 ModLoader* ModLoader::singleton;
@@ -41,7 +41,8 @@ void ModLoader::load_content() {
 	ResourceLoader loader;
 	TypedArray<Node> inits;
 
-	for(String file_name : dir->get_files()) {
+	for(String file_name_raw : dir->get_files()) {
+		String file_name = file_name_raw.trim_suffix(".remap");
 		Ref<Resource> res_ref = loader.load(dir->get_current_dir() + '/' + file_name);
 		ERR_CONTINUE_MSG(res_ref.is_null(), file_name + " failed to load");
 		ERR_CONTINUE_MSG(!res_ref.ptr()->is_class(PackedScene::get_class_static()), file_name + " is not a PackedScene");
@@ -57,6 +58,7 @@ void ModLoader::load_content() {
 		ModInit *init = cast_to<ModInit>(get_child(c_idx));
 
 		init->call("_initialize");
+		init->set_loaded();
 	}
 
 	TypedArray<ModInit> failing;
@@ -75,8 +77,18 @@ void ModLoader::load_content() {
 		print_error(failure.get_output());
 		ERR_FAIL_MSG("Failed to load mods, check game output for details");
 	}
+
+	CurrentScene::get_singleton()->set_scene("system/title");
+}
+
+bool ModLoader::has_mod(String mod_id) {
+	return has_node(mod_id);
 }
 
 bool ModLoader::is_mod_loaded(String mod_id) {
-	return has_node(mod_id);
+	return has_mod(mod_id) && get_mod_init(mod_id)->is_loaded();
+}
+
+ModInit *ModLoader::get_mod_init(String mod_id) {
+	return cast_to<ModInit>(get_node(mod_id));
 }

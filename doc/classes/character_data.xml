@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="CharacterData" inherits="Node">
+	<brief_description>
+		Defines a character when put in "res://data/characters"
+	</brief_description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="set_data_path">
+			<return type="void" />
+			<description>
+				Only used by the editor.
+				Will throw an error if used outside of the editor!
+			</description>
+		<method name="get_data_path">
+			<return type="String" />
+			<description>
+				Returns the character data path in the character data directory.
+			</description>
+		</method>
+		<method name="get_sub_resources">
+			<return type="Array[Resource]" />
+			<param index=0 name="sub_resource_id" type="String" />
+			<description>
+				Returns sub resources for the character.
+			</description>
+	</methods>
+</class>

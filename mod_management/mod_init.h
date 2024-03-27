@@ -9,9 +9,12 @@ class ModInit : public Node {
 private:
 	static void _bind_methods();
 
+	bool has_loaded = false;
 public:
-
 	ModInit();
+
+	void set_loaded();
+	bool is_loaded();
 };
 
 #endif // MOD_INIT_H

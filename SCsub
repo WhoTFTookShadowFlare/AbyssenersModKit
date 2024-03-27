@@ -2,5 +2,12 @@ Import("env")
 Import("env_modules")
 
 env.add_source_files(env.modules_sources, "*.cpp")
+
 env.add_source_files(env.modules_sources, "characters/*.cpp")
+env.add_source_files(env.modules_sources, "characters/common_components/*.cpp")
+
+env.add_source_files(env.modules_sources, "resources/*.cpp")
+
+env.add_source_files(env.modules_sources, "singletons/*.cpp")
+
 env.add_source_files(env.modules_sources, "mod_management/*.cpp")

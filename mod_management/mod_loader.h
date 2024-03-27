@@ -3,6 +3,7 @@
 
 #include "scene/main/node.h"
 
+#include "mod_init.h"
 #include "load_order.h"
 
 class ModLoader : public Node {
@@ -22,7 +23,9 @@ public:
 
 	void load_content();
 
+	bool has_mod(String mod_id);
 	bool is_mod_loaded(String mod_id);
+	ModInit *get_mod_init(String mod_id);
 };
 
 #endif // MOD_LOADER_H

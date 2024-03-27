@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="ModLoader" inherits="Node">
+	<brief_description>
+		Singleton for loading external mods.
+	</brief_description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="load_content">
+			<return type="void" />
+			<description>
+				Loads all the mods in the load order.
+			</description>
+		</method>
+		<method name="has_mod">
+			<return type="bool" />
+			<param index=0 name="mod_id" type="String" />
+			<description>
+				Returns true if the mod exists, but not if it has loaded.
+			</description>
+		</method>
+		<method name="is_mod_loaded">
+			<return type="bool" />
+			<param index=0 name="mod_id" type="String" />
+			<description>
+				Returns true if the mod is loaded.
+			</description>
+		</method>
+		<method name="get_mod_init">
+			<return type="ModInit" />
+			<param index=0 name="mod_id" type="String" />
+			<description>
+				Returns the ModInit of a given ID.
+			</description>
+		</method>
+	</methods>
+</class>
