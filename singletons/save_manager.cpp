@@ -120,12 +120,23 @@ void SaveManager::set_game_file_name(String file_name) {
 #else
 		".res";
 #endif
-	if(!FileAccess::exists(target_file)) { ERR_FAIL_MSG("Could not find file " + target_file); }
+	if(!FileAccess::exists(target_file)) {
+		game_file = Ref<SaveFile>(memnew(SaveFile));
+		game_file_name = file_name;
+
+		emit_signal("setup_game_file");
+		emit_signal("save_game_file", game_file);
+		write_save_files();
+
+		return;
+	}
 	write_save_files();
 
 	ResourceLoader loader;
 	game_file = loader.load(target_file);
-	game_file_name = target_file.trim_prefix("user://saves/");
+	game_file_name = file_name;
+
+	emit_signal("load_game_file", game_file);
 }
 
 String SaveManager::get_game_file_name() {

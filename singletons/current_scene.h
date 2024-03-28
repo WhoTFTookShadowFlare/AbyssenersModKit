@@ -3,6 +3,8 @@
 
 #include "scene/main/node.h"
 
+#include "../resources/save_file.h"
+
 class CurrentScene final : public Node {
 	GDCLASS(CurrentScene, Node);
 protected:
@@ -11,12 +13,13 @@ protected:
 	String scene_id;
 
 	static void _bind_methods();
-
+	void _setup();
 public:
 	static CurrentScene *get_singleton();
 	CurrentScene();
 
-	void _setup();
+	void save_scene_id(SaveFile *file);
+	void load_scene_id(SaveFile *file);
 
 	void set_scene(String id);
 	String get_scene();

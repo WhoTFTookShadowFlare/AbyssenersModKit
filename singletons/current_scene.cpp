@@ -4,6 +4,8 @@
 #include "scene/resources/packed_scene.h"
 #include "core/io/dir_access.h"
 
+#include "save_manager.h"
+
 CurrentScene *CurrentScene::singleton;
 
 void CurrentScene::_bind_methods() {
@@ -14,6 +16,8 @@ void CurrentScene::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("scene_changed", PropertyInfo(Variant::STRING, "scene_id")));
 
 	ClassDB::bind_method(D_METHOD("_setup"), &CurrentScene::_setup);
+	ClassDB::bind_method(D_METHOD("save_scene_id", "save_file"), &CurrentScene::save_scene_id);
+	ClassDB::bind_method(D_METHOD("load_scene_id", "save_file"), &CurrentScene::load_scene_id);
 }
 
 CurrentScene *CurrentScene::get_singleton() {
@@ -61,4 +65,20 @@ String CurrentScene::get_scene() {
 void CurrentScene::_setup() {
 	Window *win = SceneTree::get_singleton()->get_root();
 	win->add_child(this);
+
+	SaveManager *sv_mgr = SaveManager::get_singleton();
+	sv_mgr->connect("save_game_file", Callable(this, "save_scene_id"));
+	sv_mgr->connect("load_game_file", Callable(this, "load_scene_id"));
+}
+
+void CurrentScene::save_scene_id(SaveFile *file) {
+	file->set_data("system/scene", get_scene());
+}
+
+void CurrentScene::load_scene_id(SaveFile *file) {
+	if(!file->has_data("system/scene")) {
+		return;
+	}
+
+	set_scene(file->get_data("system/scene").stringify());
 }
