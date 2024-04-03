@@ -4,8 +4,13 @@
 #include "scene/main/scene_tree.h"
 #include "scene/main/window.h"
 
+#include "resources/damage_source.h"
+
 #include "characters/character_data.h"
 #include "characters/world_character.h"
+
+#include "characters/common_components/survival/health_component.h"
+#include "characters/common_components/survival/armor_component.h"
 
 #include "nodes/base_character_group.h"
 
@@ -25,8 +30,13 @@ static CharacterGroupManager *CharacterGroupManagerPtr = nullptr;
 
 void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 	if(p_level == MODULE_INITIALIZATION_LEVEL_SCENE) {
+		ClassDB::register_class<DamageSource>();
+
 		ClassDB::register_class<CharacterData>();
 		ClassDB::register_class<WorldCharacter>();
+
+		ClassDB::register_class<HealthComponent>();
+		ClassDB::register_class<ArmorComponent>();
 
 		ClassDB::register_class<BaseCharacterGroup>();
 
