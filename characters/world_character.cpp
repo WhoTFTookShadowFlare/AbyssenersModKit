@@ -14,6 +14,7 @@ void WorldCharacter::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("_set_is_dead", "value"), &WorldCharacter::set_is_dead);
 	ClassDB::bind_method(D_METHOD("get_is_dead"), &WorldCharacter::get_is_dead);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "_dead"), "_set_is_dead", "get_is_dead");
 
 	ADD_SIGNAL(MethodInfo("on_death"));
 	ADD_SIGNAL(MethodInfo("on_revive"));

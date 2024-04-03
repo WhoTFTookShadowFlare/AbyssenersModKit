@@ -9,8 +9,11 @@
 #include "characters/character_data.h"
 #include "characters/world_character.h"
 
+#include "characters/common_components/luck_component.h"
+
 #include "characters/common_components/survival/health_component.h"
 #include "characters/common_components/survival/armor_component.h"
+#include "characters/common_components/survival/dodge_component.h"
 
 #include "nodes/base_character_group.h"
 
@@ -35,8 +38,10 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<CharacterData>();
 		ClassDB::register_class<WorldCharacter>();
 
+		ClassDB::register_class<LuckComponent>();
 		ClassDB::register_class<HealthComponent>();
 		ClassDB::register_class<ArmorComponent>();
+		ClassDB::register_class<DodgeComponent>();
 
 		ClassDB::register_class<BaseCharacterGroup>();
 
