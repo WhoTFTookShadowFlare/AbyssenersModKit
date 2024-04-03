@@ -1,5 +1,7 @@
 #include "armor_component.h"
 
+#include "core/math/math_funcs.h"
+
 #include "../../world_character.h"
 
 ArmorComponent::ArmorComponent() {}
@@ -55,12 +57,14 @@ void ArmorComponent::_notification(int p_what) {
 
 		Node *parent = get_parent();
 		ERR_FAIL_COND(!parent->is_class(WorldCharacter::get_class_static()));
-		WorldCharacter *character = cast_to<WorldCharacter>(parent);
+		character = cast_to<WorldCharacter>(parent);
 
 		TypedArray<Callable> damage_handler = character->get_damage_handler_queue();
 		damage_handler.push_front(Callable(this, "handle_damage"));
 	} break;
 	case NOTIFICATION_INTERNAL_PHYSICS_PROCESS: {
+		if(character->get_is_dead()) return;
+
 		double delta = get_physics_process_delta_time();
 		set_next_gen_tick(get_next_gen_tick() - delta);
 		if(gen_tick_rate > 0.0)
@@ -79,7 +83,14 @@ void ArmorComponent::_notification(int p_what) {
 }
 
 void ArmorComponent::handle_damage(Ref<DamageSource> source) {
-	
+	int64_t tanked = round(get_tank_pct() * source->get_amount());
+	armor -= tanked;
+	source->set_amount(source->get_amount() - tanked);
+	if(armor <= 0) {
+		tanked = abs(armor);
+		armor = 0;
+	}
+	source->set_amount(source->get_amount() + tanked);
 }
 
 void ArmorComponent::set_armor(int64_t value) {

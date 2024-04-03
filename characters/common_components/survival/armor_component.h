@@ -3,6 +3,7 @@
 
 #include "scene/main/node.h"
 
+#include "../../world_character.h"
 #include "../../../resources/damage_source.h"
 
 class ArmorComponent final : public Node {
@@ -21,6 +22,8 @@ protected:
 	double gen_pct = 0.15; // rounded down, min 1
 
 	double armor_effeciency = 0.80;
+
+	WorldCharacter *character;
 
 public:
 	ArmorComponent();
