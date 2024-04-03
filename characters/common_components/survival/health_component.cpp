@@ -18,9 +18,6 @@ void HealthComponent::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("heal", "amount"), &HealthComponent::heal);
 	ClassDB::bind_method(D_METHOD("damage", "amount"), &HealthComponent::damage);
 
-	ClassDB::bind_method(D_METHOD("get_health_string"), &HealthComponent::get_health_string);
-	ClassDB::bind_method(D_METHOD("get_max_health_string"), &HealthComponent::get_max_health_string);
-
 	ClassDB::bind_method(D_METHOD("get_health_pct"), &HealthComponent::get_health_pct);
 
 	ClassDB::bind_method(D_METHOD("set_regen", "value"), &HealthComponent::set_regen);
@@ -78,29 +75,29 @@ void HealthComponent::handle_damage(Ref<DamageSource> source) {
 
 }
 
-void HealthComponent::set_health(u_int64_t value) {
+void HealthComponent::set_health(int64_t value) {
 	health = value;
 	if(health > max_health) health = max_health;
 }
 
-u_int64_t HealthComponent::get_health() {
+int64_t HealthComponent::get_health() {
 	return health;
 }
 
-void HealthComponent::set_max_health(u_int64_t value) {
+void HealthComponent::set_max_health(int64_t value) {
 	max_health = value;
 	set_health(get_health());
 }
 
-u_int64_t HealthComponent::get_max_health() {
+int64_t HealthComponent::get_max_health() {
 	return max_health;
 }
 
-u_int64_t HealthComponent::get_regen() {
+int64_t HealthComponent::get_regen() {
 	return regen;
 }
 
-void HealthComponent::set_regen(u_int64_t value) {
+void HealthComponent::set_regen(int64_t value) {
 	regen = value;
 	if(regen == 0) regen = 1;
 }
@@ -121,20 +118,20 @@ void HealthComponent::set_next_heal_time(double value) {
 	next_heal_time = value;
 }
 
-void HealthComponent::heal(u_int64_t amount) {
+void HealthComponent::heal(int64_t amount) {
 	ERR_FAIL_COND(!character);
-	if(get_health() > std::numeric_limits<u_int64_t>::max() + get_health() + amount)
-		set_health(std::numeric_limits<u_int64_t>::max());
+	if(get_health() > std::numeric_limits<int64_t>::max() + get_health() + amount)
+		set_health(std::numeric_limits<int64_t>::max());
 	else
 		set_health(get_health() + amount);
 	if(character->get_is_dead() && get_health() > 0) character->emit_signal("on_revive");
 	emit_signal("on_heal", amount);
 }
 
-void HealthComponent::damage(u_int64_t amount) {
+void HealthComponent::damage(int64_t amount) {
 	ERR_FAIL_COND(!character);
 	if(character->get_is_dead()) return;
-	if(get_health() < std::numeric_limits<u_int64_t>::min() - get_health() - amount)
+	if(get_health() < std::numeric_limits<int64_t>::min() - get_health() - amount)
 		set_health(0);
 	else
 		set_health(get_health() - amount);
@@ -143,12 +140,4 @@ void HealthComponent::damage(u_int64_t amount) {
 
 double HealthComponent::get_health_pct() {
 	return ((double) get_health()) / ((double) get_max_health());
-}
-
-String HealthComponent::get_health_string() {
-	return std::to_string(health).c_str();
-}
-
-String HealthComponent::get_max_health_string() {
-	return std::to_string(max_health).c_str();
 }

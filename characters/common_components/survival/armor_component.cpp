@@ -82,21 +82,21 @@ void ArmorComponent::handle_damage(Ref<DamageSource> source) {
 	
 }
 
-void ArmorComponent::set_armor(u_int64_t value) {
+void ArmorComponent::set_armor(int64_t value) {
 	armor = value;
 	if(armor > max_armor) armor = max_armor;
 }
 
-u_int64_t ArmorComponent::get_armor() {
+int64_t ArmorComponent::get_armor() {
 	return armor;
 }
 
-void ArmorComponent::set_max_armor(u_int64_t value) {
+void ArmorComponent::set_max_armor(int64_t value) {
 	max_armor = value;
 	set_armor(get_armor());
 }
 
-u_int64_t ArmorComponent::get_max_armor() {
+int64_t ArmorComponent::get_max_armor() {
 	return max_armor;
 }
 
@@ -108,12 +108,12 @@ double ArmorComponent::get_tank_pct() {
 	return get_armor_pct() * get_armor_effeciency();
 }
 
-void ArmorComponent::repair(u_int64_t amount) {
+void ArmorComponent::repair(int64_t amount) {
 	set_armor(amount + armor);
 	emit_signal("armor_repaired", amount);
 }
 
-void ArmorComponent::damage(u_int64_t amount) {
+void ArmorComponent::damage(int64_t amount) {
 	set_armor(armor - amount);
 	emit_signal("armor_damaged", amount);
 }

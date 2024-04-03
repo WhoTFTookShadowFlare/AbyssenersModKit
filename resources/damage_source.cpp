@@ -11,20 +11,20 @@ void DamageSource::_bind_methods() {
 
 DamageSource::DamageSource() {}
 
-void DamageSource::set_amount(u_int64_t value) {
+void DamageSource::set_amount(int64_t value) {
 	amount = value;
 }
 
-u_int64_t DamageSource::get_amount() {
+int64_t DamageSource::get_amount() {
 	return amount;
 }
 
-void DamageSource::set_orig_amount(u_int64_t value) {
+void DamageSource::set_orig_amount(int64_t value) {
 	ERR_FAIL_COND(orig_amount > 0);
 	orig_amount = value;
 	amount = value;
 }
 
-u_int64_t DamageSource::get_orig_amount() {
+int64_t DamageSource::get_orig_amount() {
 	return orig_amount;
 }

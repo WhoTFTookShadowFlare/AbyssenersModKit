@@ -14,10 +14,10 @@ protected:
 	static void _bind_methods();
 	void _notification(int p_what);
 
-	u_int64_t health = 25;
-	u_int64_t max_health = 25;
+	int64_t health = 25;
+	int64_t max_health = 25;
 
-	u_int64_t regen = 1;
+	int64_t regen = 1;
 	double time_per_heal = 10.0;
 	double next_heal_time = 10.0;
 
@@ -28,14 +28,14 @@ public:
 
 	void handle_damage(Ref<DamageSource> source);
 
-	void set_health(u_int64_t value);
-	u_int64_t get_health();
+	void set_health(int64_t value);
+	int64_t get_health();
 
-	void set_max_health(u_int64_t value);
-	u_int64_t get_max_health();
+	void set_max_health(int64_t value);
+	int64_t get_max_health();
 
-	u_int64_t get_regen();
-	void set_regen(u_int64_t value);
+	int64_t get_regen();
+	void set_regen(int64_t value);
 
 	double get_time_per_heal();
 	void set_time_per_heal(double value);
@@ -43,8 +43,8 @@ public:
 	double get_next_heal_time();
 	void set_next_heal_time(double value);
 
-	void heal(u_int64_t amount);
-	void damage(u_int64_t amount);
+	void heal(int64_t amount);
+	void damage(int64_t amount);
 
 	double get_health_pct();
 

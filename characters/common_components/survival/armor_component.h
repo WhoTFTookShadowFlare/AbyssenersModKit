@@ -11,8 +11,8 @@ protected:
 	static void _bind_methods();
 	void _notification(int p_what);
 
-	u_int64_t armor = 25;
-	u_int64_t max_armor = 25;
+	int64_t armor = 25;
+	int64_t max_armor = 25;
 
 	double gen_hit_delay = 10.0;
 	double gen_tick_rate = 1.0; // if 0, always be max after hit delay.
@@ -27,17 +27,17 @@ public:
 
 	void handle_damage(Ref<DamageSource> source);
 
-	void set_armor(u_int64_t value);
-	u_int64_t get_armor();
+	void set_armor(int64_t value);
+	int64_t get_armor();
 
-	void set_max_armor(u_int64_t value);
-	u_int64_t get_max_armor();
+	void set_max_armor(int64_t value);
+	int64_t get_max_armor();
 
 	double get_armor_pct();
 	double get_tank_pct();
 
-	void repair(u_int64_t amount);
-	void damage(u_int64_t amount);
+	void repair(int64_t amount);
+	void damage(int64_t amount);
 
 	void set_gen_hit_delay(double value);
 	double get_gen_hit_delay();
