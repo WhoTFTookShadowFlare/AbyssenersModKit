@@ -23,11 +23,18 @@ void WorldCharacter::_bind_methods() {
 WorldCharacter::WorldCharacter() {}
 
 void WorldCharacter::_notification(int p_what) {
+	if(Engine::get_singleton()->is_editor_hint()) return;
+
 	switch(p_what) {
 	case NOTIFICATION_READY: {
+		set_physics_process_internal(true);
+
 		connect("on_death", Callable(this, "_set_is_dead").bind(true));
 		connect("on_revive", Callable(this, "_set_is_dead").bind(false));
 	} break;
+	case NOTIFICATION_INTERNAL_PHYSICS_PROCESS:
+		set_velocity(get_velocity() / 1.2);
+		move_and_slide();
 	default:
 		break;
 	}
