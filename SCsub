@@ -1,6 +1,8 @@
 Import("env")
 Import("env_modules")
 
+## TODO: GLOB source files to simplify the file
+
 env.add_source_files(env.modules_sources, "*.cpp")
 env.add_source_files(env.modules_sources, "utils/*.cpp")
 
@@ -11,6 +13,7 @@ env.add_source_files(env.modules_sources, "nodes/ai/*.cpp")
 
 env.add_source_files(env.modules_sources, "characters/common_components/*.cpp")
 env.add_source_files(env.modules_sources, "characters/common_components/survival/*.cpp")
+env.add_source_files(env.modules_sources, "characters/common_components/mobility/*.cpp")
 
 env.add_source_files(env.modules_sources, "resources/*.cpp")
 
