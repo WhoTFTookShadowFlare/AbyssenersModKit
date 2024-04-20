@@ -27,14 +27,18 @@
 #include "mod_management/mod_loader.h"
 
 #include "resources/save_file.h"
+#include "resources/camera_modifier.h"
+
 #include "singletons/save_manager.h"
 #include "singletons/current_scene.h"
 #include "singletons/character_group_manager.h"
+#include "singletons/game_camera.h"
 
 static ModLoader* ModLoaderPtr = nullptr;
 static SaveManager *SaveManagerPtr = nullptr;
 static CurrentScene *CurrentScenePtr = nullptr;
 static CharacterGroupManager *CharacterGroupManagerPtr = nullptr;
+static GameCamera *GameCameraPtr = nullptr;
 
 void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 	if(p_level == MODULE_INITIALIZATION_LEVEL_SCENE) {
@@ -74,6 +78,12 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 		CharacterGroupManagerPtr = memnew(CharacterGroupManager);
 		Engine::get_singleton()->add_singleton(Engine::Singleton("CharacterGroupManager", CharacterGroupManager::get_singleton()));
 		CharacterGroupManager::get_singleton()->call_deferred("_setup");
+
+		ClassDB::register_class<CameraModifier>();
+		ClassDB::register_class<GameCamera>();
+		GameCameraPtr = memnew(GameCamera);
+		Engine::get_singleton()->add_singleton(Engine::Singleton("GameCamera", GameCamera::get_singleton()));
+		GameCamera::get_singleton()->call_deferred("_setup");
 		return;
 	}
 }

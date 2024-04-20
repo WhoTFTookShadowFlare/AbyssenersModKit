@@ -24,7 +24,7 @@ void MovementComponent::_notification(int p_what) {
 	case NOTIFICATION_INTERNAL_PHYSICS_PROCESS: {
 		if(!character) return;
 
-		Vector2 mv_dir = get_next_path_position() - character->get_position();
+		Vector3 mv_dir = get_next_path_position() - character->get_position();
 		character->set_velocity(character->get_velocity() + mv_dir * (speed * 32.0));
 	} break;
 	default:

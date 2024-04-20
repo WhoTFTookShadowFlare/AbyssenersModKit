@@ -7,6 +7,7 @@ CharacterGroupManager *CharacterGroupManager::singleton;
 
 CharacterGroupManager::CharacterGroupManager() {
 	singleton = this;
+	set_name("CharacterGroupManager");
 }
 
 void CharacterGroupManager::_bind_methods() {
