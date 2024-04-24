@@ -25,7 +25,8 @@ void MovementComponent::_notification(int p_what) {
 		if(!character) return;
 
 		Vector3 mv_dir = get_next_path_position() - character->get_position();
-		character->set_velocity(character->get_velocity() + mv_dir * (speed * 32.0));
+		mv_dir.y = 0.0;
+		character->set_velocity(character->get_velocity() + (mv_dir * speed));
 	} break;
 	default:
 		break;

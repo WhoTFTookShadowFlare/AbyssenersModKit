@@ -11,6 +11,10 @@ void GameCamera::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("_save", "file"), &GameCamera::_save);
 	ClassDB::bind_method(D_METHOD("_load", "file"), &GameCamera::_load);
+
+	ClassDB::bind_method(D_METHOD("set_modifiers", "value"), &GameCamera::set_modifiers);
+	ClassDB::bind_method(D_METHOD("get_modifiers"), &GameCamera::get_modifiers);
+	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "modifiers"), "set_modifiers", "get_modifiers");
 }
 
 GameCamera *GameCamera::get_singleton() {
@@ -55,4 +59,12 @@ void GameCamera::_load(Ref<SaveFile> file) {
 	if(!file->has_data("sys/cam/mods")) return;
 	ERR_FAIL_COND_MSG(!file->get_data("sys/cam/mods").is_array(), "Wrong type for 'sys/cam/mods', expected an array");
 	modifiers = (TypedArray<CameraModifier>) file->get_data("sys/cam/mods");
+}
+
+TypedArray<CameraModifier> GameCamera::get_modifiers() {
+	return modifiers;
+}
+
+void GameCamera::set_modifiers(TypedArray<CameraModifier> mods) {
+	modifiers = mods;
 }

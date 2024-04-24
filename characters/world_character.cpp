@@ -32,9 +32,14 @@ void WorldCharacter::_notification(int p_what) {
 		connect("on_death", Callable(this, "_set_is_dead").bind(true));
 		connect("on_revive", Callable(this, "_set_is_dead").bind(false));
 	} break;
-	case NOTIFICATION_INTERNAL_PHYSICS_PROCESS:
-		set_velocity(get_velocity() / 1.2);
+	case NOTIFICATION_INTERNAL_PHYSICS_PROCESS: {
+		Vector3 velo = get_velocity();
+		velo.x /= 1.2;
+		velo.z /= 1.2;
+		velo.y -= 9.8 * get_physics_process_delta_time();
+		set_velocity(velo);
 		move_and_slide();
+	}; break;
 	default:
 		break;
 	}

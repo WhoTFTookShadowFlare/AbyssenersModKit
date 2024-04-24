@@ -24,6 +24,7 @@ public:
 	GameCamera();
 
 	TypedArray<CameraModifier> get_modifiers();
+	void set_modifiers(TypedArray<CameraModifier> mods);
 
 	void add_modifier(Ref<CameraModifier> modifier);
 	void remove_modifier(Ref<CameraModifier> modifier);
