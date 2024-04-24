@@ -36,7 +36,6 @@ void WorldCharacter::_notification(int p_what) {
 		Vector3 velo = get_velocity();
 		velo.x /= 1.2;
 		velo.z /= 1.2;
-		velo.y -= 9.8 * get_physics_process_delta_time();
 		set_velocity(velo);
 		move_and_slide();
 	}; break;
