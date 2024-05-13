@@ -11,5 +11,13 @@
 			<description>
 				Loads all the mods in the load order.
 			</description>
+		</method>
+		<method name="is_mod_loaded">
+			<return type="bool" />
+			<param index="0" name="mod_name", type="String" />
+			<description>
+				Returns [code]true[/code] if a mod is loaded.
+			</description>
+		</method>
 	</methods>
 </class>

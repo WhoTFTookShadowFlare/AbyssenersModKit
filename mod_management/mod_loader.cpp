@@ -10,7 +10,7 @@ ModLoader* ModLoader::singleton;
 
 void ModLoader::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("load_content"), &ModLoader::load_content);
-	ClassDB::bind_method(D_METHOD("is_mod_laoded"), &ModLoader::is_mod_loaded);
+	ClassDB::bind_method(D_METHOD("is_mod_loaded", "mod_name"), &ModLoader::is_mod_loaded);
 
 	ADD_SIGNAL(MethodInfo("mod_loaded", PropertyInfo(Variant::OBJECT, "mod", PROPERTY_HINT_RESOURCE_TYPE, "Mod", PROPERTY_USAGE_DEFAULT, ModInit::get_class_static())));
 }

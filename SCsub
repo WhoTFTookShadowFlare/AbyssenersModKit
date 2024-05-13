@@ -1,22 +1,11 @@
+import os
+import glob
+
 Import("env")
 Import("env_modules")
 
-## TODO: GLOB source files to simplify the file
+MODULE_DIR: str = os.path.dirname(os.getcwd())
 
-env.add_source_files(env.modules_sources, "*.cpp")
-env.add_source_files(env.modules_sources, "utils/*.cpp")
-
-env.add_source_files(env.modules_sources, "characters/*.cpp")
-env.add_source_files(env.modules_sources, "nodes/*.cpp")
-
-env.add_source_files(env.modules_sources, "nodes/ai/*.cpp")
-
-env.add_source_files(env.modules_sources, "characters/common_components/*.cpp")
-env.add_source_files(env.modules_sources, "characters/common_components/survival/*.cpp")
-env.add_source_files(env.modules_sources, "characters/common_components/mobility/*.cpp")
-
-env.add_source_files(env.modules_sources, "resources/*.cpp")
-
-env.add_source_files(env.modules_sources, "singletons/*.cpp")
-
-env.add_source_files(env.modules_sources, "mod_management/*.cpp")
+files = []
+glob_data = MODULE_DIR + "/abysseners_mod_kit/**/*.cpp"
+env.add_source_files(env.modules_sources, glob.glob(glob_data, recursive=True))
