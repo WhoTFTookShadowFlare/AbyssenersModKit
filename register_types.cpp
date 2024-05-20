@@ -9,6 +9,8 @@
 #include "characters/character_data.h"
 #include "characters/world_character.h"
 
+#include "characters/common_components/gfx/sprite_component.h"
+
 #include "characters/common_components/luck_component.h"
 #include "characters/common_components/ai_component.h"
 
@@ -51,6 +53,8 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 
 		ClassDB::register_class<AIComponent>();
 		ClassDB::register_class<AITask>();
+
+		ClassDB::register_class<SpriteComponent>();
 
 		ClassDB::register_class<GravityComponent>();
 		ClassDB::register_class<MovementComponent>();
