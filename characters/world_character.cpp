@@ -38,6 +38,12 @@ void WorldCharacter::_notification(int p_what) {
 		velo.z /= 1.2;
 		set_velocity(velo);
 		move_and_slide();
+
+		if(data->get_rotates_to_velocity()) {
+			Vector3 look_target = get_position() + velo;
+			look_target.y = get_position().y;
+			if(!get_position().is_equal_approx(look_target)) look_at(look_target);
+		}
 	}; break;
 	default:
 		break;

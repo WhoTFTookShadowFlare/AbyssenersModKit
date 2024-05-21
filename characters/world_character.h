@@ -1,7 +1,7 @@
 #ifndef WORLD_CHARACTER_H
 #define WORLD_CHARACTER_H
 
-#include "scene/3d/physics_body_3d.h"
+#include "scene/3d/physics/character_body_3d.h"
 
 #include "character_data.h"
 #include "../resources/damage_source.h"

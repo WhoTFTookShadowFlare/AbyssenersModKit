@@ -20,11 +20,20 @@ protected:
 	double ANGLE_BETWEEN = 360.0 / (double) direction_count;
 	double ANGLE_START_OFF = ANGLE_BETWEEN / 2.0;
 
+	bool cw_rotation = true;
+	int rotation_frame_offset = 0;
+
 public:
 	const String ANIMATION_ERROR = "error";
 	SpriteComponent();
 
 	void update_texture();
+
+	void set_cw_rotation(bool value);
+	bool get_cw_rotation();
+
+	void set_rotation_frame_offset(int value);
+	int get_rotation_frame_offset();
 
 	void set_current_animation(String value);
 	String get_current_animation();

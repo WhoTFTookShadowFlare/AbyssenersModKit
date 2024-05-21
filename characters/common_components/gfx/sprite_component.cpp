@@ -29,6 +29,15 @@ void SpriteComponent::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_direction_count"), &SpriteComponent::get_direction_count);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "direction_count"), "set_direction_count", "get_direction_count");
 
+	ClassDB::bind_method(D_METHOD("set_cw_rotation", "value"), &SpriteComponent::set_cw_rotation);
+	ClassDB::bind_method(D_METHOD("get_cw_rotation"), &SpriteComponent::get_cw_rotation);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "cw_rotation"), "set_cw_rotation", "get_cw_rotation");
+
+	ClassDB::bind_method(D_METHOD("set_rotation_frame_offset", "value"), &SpriteComponent::set_rotation_frame_offset);
+	ClassDB::bind_method(D_METHOD("get_rotation_frame_offset"), &SpriteComponent::get_rotation_frame_offset);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "rotation_frame_offset"), "set_rotation_frame_offset", "get_rotation_frame_offset");
+	
+
 	ADD_SIGNAL(MethodInfo("animation_changed"));
 }
 
@@ -54,9 +63,11 @@ void SpriteComponent::_notification(int p_what) {
 		Camera3D *cam = view->get_camera_3d();
 		if(!cam) return;
 
-		double angle_diff = Math::wrapf(Math::rad_to_deg(cam->get_rotation().y - get_rotation().y) + ANGLE_START_OFF, 0.0, 360.0);
-		int spr_idx = (int) Math::floor(angle_diff / ANGLE_BETWEEN);
-		Sprite3D::set_frame(spr_idx);
+		double angle_diff = Math::wrapf(Math::rad_to_deg(get_global_rotation().y - cam->get_global_rotation().y) + ANGLE_START_OFF, 0.0, 360.0);
+		int spr_idx;
+		if(cw_rotation) spr_idx = (int) Math::floor(angle_diff / ANGLE_BETWEEN);
+		else spr_idx = (int) Math::ceil(-angle_diff / ANGLE_BETWEEN);
+		Sprite3D::set_frame(Math::wrapi(spr_idx + rotation_frame_offset, 0, direction_count));
 
 	}; break;
 	default:
@@ -66,6 +77,22 @@ void SpriteComponent::_notification(int p_what) {
 
 void SpriteComponent::update_texture() {
 	set_texture(animation_data->get_frame_texture(get_current_animation(), get_current_frame()));
+}
+
+void SpriteComponent::set_cw_rotation(bool value) {
+	cw_rotation = value;
+}
+
+bool SpriteComponent::get_cw_rotation() {
+	return cw_rotation;
+}
+
+void SpriteComponent::set_rotation_frame_offset(int value) {
+	rotation_frame_offset = value;
+}
+
+int SpriteComponent::get_rotation_frame_offset() {
+	return rotation_frame_offset;
 }
 
 void SpriteComponent::set_current_animation(String value) {

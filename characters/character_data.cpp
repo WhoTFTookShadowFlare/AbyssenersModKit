@@ -14,6 +14,10 @@ void CharacterData::_bind_methods() {
 	);
 
 	ClassDB::bind_method(D_METHOD("get_sub_resources", "sub_resource_id"), &CharacterData::get_sub_resources);
+
+	ClassDB::bind_method(D_METHOD("set_rotates_to_velocity", "value"), &CharacterData::set_rotates_to_velocity);
+	ClassDB::bind_method(D_METHOD("get_rotates_to_velocity"), &CharacterData::get_rotates_to_velocity);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "rotates_to_velocity"), "set_rotates_to_velocity", "get_rotates_to_velocity");
 }
 
 CharacterData::CharacterData() {}
@@ -53,4 +57,12 @@ TypedArray<Resource> CharacterData::get_sub_resources(String sub_resource_id) {
 	}
 
 	return resources;
+}
+
+bool CharacterData::get_rotates_to_velocity() {
+	return rotates_to_velo;
+}
+
+void CharacterData::set_rotates_to_velocity(bool value) {
+	rotates_to_velo = value;
 }

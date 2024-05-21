@@ -6,8 +6,8 @@
 
 #include "../../world_character.h"
 
-class MovementComponent : public NavigationAgent3D {
-	GDCLASS(MovementComponent, NavigationAgent3D);
+class PathingComponent : public NavigationAgent3D {
+	GDCLASS(PathingComponent, NavigationAgent3D);
 protected:
 	static void _bind_methods();
 	void _notification(int p_what);
@@ -16,7 +16,7 @@ protected:
 
 	double speed = 1.0;
 public:
-	MovementComponent();
+	PathingComponent();
 
 	void set_speed(double value);
 	double get_speed();

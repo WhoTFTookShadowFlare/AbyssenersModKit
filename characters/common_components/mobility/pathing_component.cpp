@@ -1,16 +1,16 @@
-#include "movement_component.h"
+#include "pathing_component.h"
 
 #include "scene/resources/world_2d.h"
 
-MovementComponent::MovementComponent() {}
+PathingComponent::PathingComponent() {}
 
-void MovementComponent::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("get_speed"), &MovementComponent::get_speed);
-	ClassDB::bind_method(D_METHOD("set_speed", "value"), &MovementComponent::set_speed);
+void PathingComponent::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_speed"), &PathingComponent::get_speed);
+	ClassDB::bind_method(D_METHOD("set_speed", "value"), &PathingComponent::set_speed);
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "speed"), "set_speed", "get_speed");
 }
 
-void MovementComponent::_notification(int p_what) {
+void PathingComponent::_notification(int p_what) {
 	if(Engine::get_singleton()->is_editor_hint()) return;
 
 	switch(p_what) {
@@ -33,10 +33,10 @@ void MovementComponent::_notification(int p_what) {
 	}
 }
 
-double MovementComponent::get_speed() {
+double PathingComponent::get_speed() {
 	return speed;
 }
 
-void MovementComponent::set_speed(double value) {
+void PathingComponent::set_speed(double value) {
 	speed = value;
 }
