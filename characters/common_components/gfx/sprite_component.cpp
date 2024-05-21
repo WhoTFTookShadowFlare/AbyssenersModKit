@@ -120,8 +120,7 @@ String SpriteComponent::get_current_animation() {
 
 void SpriteComponent::set_current_frame(int value) {
 	int anim_frame_count = animation_data->get_frame_count(current_animation);
-	if(current_frame == value % anim_frame_count) return;
-	current_frame = value % anim_frame_count;
+	current_frame = Math::wrapi(value, 0, anim_frame_count);
 	update_texture();
 	emit_signal("frame_changed");
 }
