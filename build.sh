@@ -2,5 +2,4 @@
 
 clear
 cd ../..
-scons dev_build=yes
-./bin/*
+scons dev_build=yes && ./bin/*

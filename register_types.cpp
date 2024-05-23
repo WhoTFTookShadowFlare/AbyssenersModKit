@@ -11,6 +11,9 @@
 
 #include "characters/common_components/gfx/sprite_component.h"
 
+#include "resources/base_item.h"
+#include "characters/common_components/inventory_component.h"
+
 #include "characters/common_components/luck_component.h"
 #include "characters/common_components/ai_component.h"
 
@@ -37,12 +40,14 @@
 #include "singletons/current_scene.h"
 #include "singletons/character_group_manager.h"
 #include "singletons/game_camera.h"
+#include "singletons/item_signals.h"
 
 static ModLoader* ModLoaderPtr = nullptr;
 static SaveManager *SaveManagerPtr = nullptr;
 static CurrentScene *CurrentScenePtr = nullptr;
 static CharacterGroupManager *CharacterGroupManagerPtr = nullptr;
 static GameCamera *GameCameraPtr = nullptr;
+static ItemSignals *ItemSignalsPtr = nullptr;
 
 void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 	if(p_level == MODULE_INITIALIZATION_LEVEL_SCENE) {
@@ -55,6 +60,9 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<AITask>();
 
 		ClassDB::register_class<SpriteComponent>();
+
+		ClassDB::register_class<BaseItem>();
+		ClassDB::register_class<InventoryComponent>();
 
 		ClassDB::register_class<GravityComponent>();
 		ClassDB::register_class<PathingComponent>();
@@ -92,6 +100,10 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 		GameCameraPtr = memnew(GameCamera);
 		Engine::get_singleton()->add_singleton(Engine::Singleton("GameCamera", GameCamera::get_singleton()));
 		GameCamera::get_singleton()->call_deferred("_setup");
+
+		ClassDB::register_class<ItemSignals>();
+		ItemSignalsPtr = memnew(ItemSignals);
+		Engine::get_singleton()->add_singleton(Engine::Singleton("ItemSignals", ItemSignals::get_singleton()));
 		return;
 	}
 }
@@ -100,6 +112,7 @@ void uninitialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 	if(p_level == MODULE_INITIALIZATION_LEVEL_SCENE) {
 		memdelete(ModLoaderPtr);
 		memdelete(SaveManagerPtr);
+		memdelete(ItemSignalsPtr);
 		return;
 	}
 }
