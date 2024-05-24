@@ -26,6 +26,8 @@
 #include "characters/common_components/survival/dodge_component.h"
 
 #include "nodes/base_character_group.h"
+#include "menu/base_menu_layer.h"
+#include "menu/main_menu.h"
 
 #include "nodes/ai/ai_task.h"
 
@@ -41,6 +43,7 @@
 #include "singletons/character_group_manager.h"
 #include "singletons/game_camera.h"
 #include "singletons/item_signals.h"
+#include "menu/menu_stack.h"
 
 static ModLoader* ModLoaderPtr = nullptr;
 static SaveManager *SaveManagerPtr = nullptr;
@@ -48,6 +51,7 @@ static CurrentScene *CurrentScenePtr = nullptr;
 static CharacterGroupManager *CharacterGroupManagerPtr = nullptr;
 static GameCamera *GameCameraPtr = nullptr;
 static ItemSignals *ItemSignalsPtr = nullptr;
+static MenuStack *MenuStackPtr = nullptr;
 
 void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 	if(p_level == MODULE_INITIALIZATION_LEVEL_SCENE) {
@@ -73,6 +77,8 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<DodgeComponent>();
 
 		ClassDB::register_class<BaseCharacterGroup>();
+		ClassDB::register_class<BaseMenuLayer>();
+		ClassDB::register_class<MainMenu>();
 
 		ClassDB::register_class<ModInit>();
 		ClassDB::register_class<LoadOrder>();
@@ -104,6 +110,11 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<ItemSignals>();
 		ItemSignalsPtr = memnew(ItemSignals);
 		Engine::get_singleton()->add_singleton(Engine::Singleton("ItemSignals", ItemSignals::get_singleton()));
+
+		ClassDB::register_class<MenuStack>();
+		MenuStackPtr = memnew(MenuStack);
+		Engine::get_singleton()->add_singleton(Engine::Singleton("MenuStack", MenuStack::get_singleton()));
+		MenuStack::get_singleton()->call_deferred("_setup");
 		return;
 	}
 }

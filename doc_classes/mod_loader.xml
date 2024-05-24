@@ -3,6 +3,9 @@
 	<brief_description>
 		Singleton for loading external mods.
 	</brief_description>
+	<description>
+		The [ModLoader] singleton is used to manage mods for the game.
+	</description>
 	<tutorials>
 	</tutorials>
 	<methods>

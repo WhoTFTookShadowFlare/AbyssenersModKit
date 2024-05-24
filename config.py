@@ -22,7 +22,7 @@ def get_doc_classes() -> list:
 		return glob.glob(glob_data)
 	except:
 		type, value, traceback = sys.exc_info()
-		print("[Abysseners] The module did a fucky wucky of type %s" % type)
+		print("[Abysseners] The module did a fucky wucky of type %s while trying to get documentation." % type)
 		print("\tvalue: %s" % value)
 	return []
 
