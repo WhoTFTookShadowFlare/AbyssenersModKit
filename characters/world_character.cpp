@@ -18,6 +18,8 @@ void WorldCharacter::_bind_methods() {
 
 	ADD_SIGNAL(MethodInfo("on_death"));
 	ADD_SIGNAL(MethodInfo("on_revive"));
+
+	ClassDB::bind_method(D_METHOD("get_component", "type"), &WorldCharacter::get_component);
 }
 
 WorldCharacter::WorldCharacter() {}
@@ -81,4 +83,15 @@ void WorldCharacter::handle_damage(Ref<DamageSource> src) {
 	}
 
 	if(src->get_amount() > 0) emit_signal("on_death");
+}
+
+Node *WorldCharacter::get_component(StringName type) {
+	for(Variant child_var : get_children()) {
+		Node *child = cast_to<Node>(child_var.operator Object *());
+		if(child->get_class() == type) {
+			return child;
+		}
+	}
+
+	return nullptr;
 }

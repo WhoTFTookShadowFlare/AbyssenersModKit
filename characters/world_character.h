@@ -28,6 +28,8 @@ public:
 
 	TypedArray<Callable> get_damage_handler_queue();
 	void handle_damage(Ref<DamageSource> source);
+
+	Node *get_component(StringName type);
 };
 
 #endif // WORLD_CHARACTER_H

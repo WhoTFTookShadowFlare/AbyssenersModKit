@@ -1,5 +1,7 @@
 #include "base_item.h"
 
+#include "scene/resources/texture.h"
+
 BaseItem::BaseItem() {}
 
 void BaseItem::_bind_methods() {
@@ -12,6 +14,8 @@ void BaseItem::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_max_count", "value"), &BaseItem::set_max_count);
 	ClassDB::bind_method(D_METHOD("get_max_count"), &BaseItem::get_max_count);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "max_count"), "set_max_count", "get_max_count");
+
+	ClassDB::add_virtual_method(BaseItem::get_class_static(), MethodInfo(PropertyInfo(Texture2D::get_class_static()), "get_item_icon"));
 }
 
 bool BaseItem::should_be_removed() {

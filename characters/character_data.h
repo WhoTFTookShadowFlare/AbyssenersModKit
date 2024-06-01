@@ -21,6 +21,7 @@ public:
 	String get_data_path();
 
 	TypedArray<Resource> get_sub_resources(String sub_resource_id);
+	Ref<Resource> get_resource(String resource_id);
 
 	bool get_rotates_to_velocity();
 	void set_rotates_to_velocity(bool value);

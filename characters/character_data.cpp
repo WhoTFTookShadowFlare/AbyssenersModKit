@@ -31,6 +31,16 @@ String CharacterData::get_data_path() {
 	return this->data_path + '/';
 }
 
+Ref<Resource> CharacterData::get_resource(String resource_id) {
+	if(!DirAccess::exists("res://data/characters/" + get_data_path() + resource_id)) {
+		ERR_PRINT("Missing " + resource_id + " for " + data_path);
+		return Ref<Resource>();
+	}
+
+	ResourceLoader loader;
+	return loader.load("res://data/characters/" + get_data_path() + resource_id);
+}
+
 TypedArray<Resource> CharacterData::get_sub_resources(String sub_resource_id) {
 	Ref<DirAccess> dir_ref = DirAccess::open(get_data_path() + sub_resource_id);
 	if(dir_ref.is_null()) {

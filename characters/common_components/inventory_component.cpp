@@ -25,6 +25,8 @@ void InventoryComponent::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("filter_fn", "entry"), &InventoryComponent::filter_fn);
 	ClassDB::bind_method(D_METHOD("clean_empty"), &InventoryComponent::clean_empty);
+
+	ADD_SIGNAL(MethodInfo(Variant::NIL, "inventory_updated"));
 }
 
 bool InventoryComponent::can_add(Ref<BaseItem> item) {
@@ -48,6 +50,7 @@ void InventoryComponent::add_item(Ref<BaseItem> item) {
 	} else {
 		contents.push_back(item);
 	}
+	emit_signal("inventory_updated");
 }
 
 bool InventoryComponent::has_item(Ref<Script> item_type) {
@@ -67,6 +70,7 @@ Ref<BaseItem> InventoryComponent::get_item(Ref<Script> item_type) {
 void InventoryComponent::remove_item(Ref<Script> item_type) {
 	Ref<BaseItem> item = get_item(item_type);
 	contents.erase(item);
+	emit_signal("inventory_updated");
 }
 
 bool InventoryComponent::filter_fn(Variant entry) {
@@ -77,6 +81,7 @@ bool InventoryComponent::filter_fn(Variant entry) {
 
 void InventoryComponent::clean_empty() {
 	contents.filter(Callable(this, "filter_fn"));
+	emit_signal("inventory_updated");
 }
 
 void InventoryComponent::set_item_limit(int value) {

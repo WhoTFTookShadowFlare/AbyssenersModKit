@@ -28,6 +28,10 @@ bool CharacterGroupManager::has_group(String name) {
 
 BaseCharacterGroup *CharacterGroupManager::get_group(String name) {
 	Node *target = get_node(name);
+	if(target == nullptr) {
+		print_error("Missing group: " + name);
+		return nullptr;
+	} 
 	if(!target->is_class(BaseCharacterGroup::get_class_static())) {
 		print_error("Group " + name + " was not a BaseCharacterGroup");
 		return nullptr;

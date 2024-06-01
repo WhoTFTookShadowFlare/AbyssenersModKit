@@ -38,7 +38,7 @@ WorldCharacter *BaseCharacterGroup::try_spawn_character(String character_id) {
 		return nullptr;
 	}
 
-	WorldCharacter *character = cast_to<WorldCharacter>(memnew(WorldCharacter));
+	WorldCharacter *character = memnew(WorldCharacter);
 
 	ResourceLoader loader;
 	character->set_character_data(loader.load("res://data/characters/" + character_id + "/data.tres"));
