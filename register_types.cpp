@@ -4,32 +4,28 @@
 #include "scene/main/scene_tree.h"
 #include "scene/main/window.h"
 
-#include "resources/damage_source.h"
+#include "characters/nodes/character_group_manager.h"
+#include "characters/nodes/base_character_group.h"
+#include "characters/nodes/world_character.h"
 
-#include "characters/character_data.h"
-#include "characters/world_character.h"
+#include "characters/nodes/common_components/ai_component.h"
+#include "characters/nodes/common_components/inventory_component.h"
+#include "characters/nodes/common_components/luck_component.h"
 
-#include "characters/common_components/gfx/sprite_component.h"
+#include "characters/nodes/common_components/gfx/sprite_component.h"
+
+#include "characters/nodes/common_components/mobility/friction_component.h"
+#include "characters/nodes/common_components/mobility/gravity_component.h"
+#include "characters/nodes/common_components/mobility/pathing_component.h"
+
+#include "characters/nodes/common_components/survival/armor_component.h"
+#include "characters/nodes/common_components/survival/dodge_component.h"
+#include "characters/nodes/common_components/survival/health_component.h"
 
 #include "resources/base_item.h"
-#include "characters/common_components/inventory_component.h"
 
-#include "characters/common_components/luck_component.h"
-#include "characters/common_components/ai_component.h"
-
-#include "characters/common_components/mobility/gravity_component.h"
-#include "characters/common_components/mobility/pathing_component.h"
-#include "characters/common_components/mobility/friction_component.h"
-
-#include "characters/common_components/survival/health_component.h"
-#include "characters/common_components/survival/armor_component.h"
-#include "characters/common_components/survival/dodge_component.h"
-
-#include "nodes/base_character_group.h"
 #include "menu/base_menu_layer.h"
 #include "menu/main_menu.h"
-
-#include "nodes/ai/ai_task.h"
 
 #include "mod_management/mod_init.h"
 #include "mod_management/load_order.h"
@@ -40,9 +36,7 @@
 
 #include "singletons/save_manager.h"
 #include "singletons/current_scene.h"
-#include "singletons/character_group_manager.h"
 #include "singletons/game_camera.h"
-#include "singletons/item_signals.h"
 #include "menu/menu_stack.h"
 
 static ModLoader* ModLoaderPtr = nullptr;
@@ -50,7 +44,6 @@ static SaveManager *SaveManagerPtr = nullptr;
 static CurrentScene *CurrentScenePtr = nullptr;
 static CharacterGroupManager *CharacterGroupManagerPtr = nullptr;
 static GameCamera *GameCameraPtr = nullptr;
-static ItemSignals *ItemSignalsPtr = nullptr;
 static MenuStack *MenuStackPtr = nullptr;
 
 void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
@@ -107,10 +100,6 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 		Engine::get_singleton()->add_singleton(Engine::Singleton("GameCamera", GameCamera::get_singleton()));
 		GameCamera::get_singleton()->call_deferred("_setup");
 
-		ClassDB::register_class<ItemSignals>();
-		ItemSignalsPtr = memnew(ItemSignals);
-		Engine::get_singleton()->add_singleton(Engine::Singleton("ItemSignals", ItemSignals::get_singleton()));
-
 		ClassDB::register_class<MenuStack>();
 		MenuStackPtr = memnew(MenuStack);
 		Engine::get_singleton()->add_singleton(Engine::Singleton("MenuStack", MenuStack::get_singleton()));
@@ -123,7 +112,6 @@ void uninitialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 	if(p_level == MODULE_INITIALIZATION_LEVEL_SCENE) {
 		memdelete(ModLoaderPtr);
 		memdelete(SaveManagerPtr);
-		memdelete(ItemSignalsPtr);
 		return;
 	}
 }

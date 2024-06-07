@@ -3,7 +3,7 @@
 
 #include "scene/main/node.h"
 
-#include "../nodes/base_character_group.h"
+#include "base_character_group.h"
 
 class CharacterGroupManager final : public Node {
 	GDCLASS(CharacterGroupManager, Node);

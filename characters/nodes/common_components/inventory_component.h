@@ -7,7 +7,7 @@
 #include "core/io/resource.h"
 #include "core/object/script_language.h"
 
-#include "../../resources/base_item.h"
+#include "../../../resources/base_item.h"
 
 class InventoryComponent : public Node {
 	GDCLASS(InventoryComponent, Node);

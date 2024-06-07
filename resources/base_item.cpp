@@ -16,6 +16,7 @@ void BaseItem::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "max_count"), "set_max_count", "get_max_count");
 
 	ClassDB::add_virtual_method(BaseItem::get_class_static(), MethodInfo(PropertyInfo(Texture2D::get_class_static()), "get_item_icon"));
+	ClassDB::add_virtual_method(BaseItem::get_class_static(), MethodInfo(Variant::NIL, "add_item_signals"));
 }
 
 bool BaseItem::should_be_removed() {

@@ -3,7 +3,7 @@
 
 #include "scene/3d/physics/character_body_3d.h"
 
-#include "character_data.h"
+#include "../resources/character_data.h"
 #include "../resources/damage_source.h"
 
 class WorldCharacter final : public CharacterBody3D {

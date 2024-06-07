@@ -1,7 +1,7 @@
 #ifndef AI_COMPONENT_H
 #define AI_COMPONENT_H
 
-#include "../../nodes/ai/ai_task.h"
+#include "../ai/ai_task.h"
 
 class AIComponent : public AITask {
 	GDCLASS(AIComponent, AITask);
