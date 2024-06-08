@@ -83,14 +83,17 @@ void ArmorComponent::_notification(int p_what) {
 }
 
 void ArmorComponent::handle_damage(Ref<DamageSource> source) {
+	if(source.is_null()) return;
+	if(source->has_flag(ArmorComponent::ARMOR_PRIERCE_FLAG)) return;
+
 	double tanked = round(get_tank_pct() * source->get_amount());
 	armor -= tanked;
 	source->set_amount(source->get_amount() - tanked);
 	if(armor <= 0) {
 		tanked = abs(armor);
 		armor = 0;
+		source->set_amount(source->get_amount() + tanked);
 	}
-	source->set_amount(source->get_amount() + tanked);
 }
 
 void ArmorComponent::set_armor(double value) {

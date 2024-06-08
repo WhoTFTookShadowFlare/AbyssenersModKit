@@ -48,6 +48,8 @@ void HealthComponent::_notification(int p_what) {
 }
 
 void HealthComponent::handle_damage(Ref<DamageSource> source) {
+	if(source.is_null()) return;
+
 	health -= source->get_amount();
 	source->set_amount(abs(health));
 	if(health < 0) health = 0;

@@ -26,6 +26,8 @@ protected:
 	WorldCharacter *character;
 
 public:
+	const StringName ARMOR_PRIERCE_FLAG = "IS_ARMOR_PIERCING";
+
 	ArmorComponent();
 
 	void handle_damage(Ref<DamageSource> source);

@@ -22,6 +22,8 @@ protected:
 	LuckComponent *luck;
 
 public:
+	const StringName NO_DODGE_FLAG = "NO_DODGE_FLAG";
+
 	DodgeComponent();
 	void handle_damage(Ref<DamageSource> source);
 

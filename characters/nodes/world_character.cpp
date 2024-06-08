@@ -86,6 +86,8 @@ TypedArray<Callable> WorldCharacter::get_damage_handler_queue() {
 }
 
 void WorldCharacter::handle_damage(Ref<DamageSource> src) {
+	if(src.is_null()) return;
+
 	print_verbose("damaging " + get_name() + ":");
 	for(int c_idx = 0; c_idx < damage_handler_queue.size(); c_idx++) {
 		Callable func = damage_handler_queue[c_idx];

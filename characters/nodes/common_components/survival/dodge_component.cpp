@@ -50,6 +50,9 @@ void DodgeComponent::_notification(int p_what) {
 }
 
 void DodgeComponent::handle_damage(Ref<DamageSource> source) {
+	if(source.is_null()) return;
+	if(source->has_flag(DodgeComponent::NO_DODGE_FLAG)) return;
+
 	bool should_dodge;
 	if(luck) should_dodge = dodge_chance >= luck->get_rand_float(0.01);
 	else {
