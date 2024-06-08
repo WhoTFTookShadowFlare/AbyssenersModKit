@@ -9,11 +9,11 @@ ArmorComponent::ArmorComponent() {}
 void ArmorComponent::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_armor", "value"), &ArmorComponent::set_armor);
 	ClassDB::bind_method(D_METHOD("get_armor"), &ArmorComponent::get_armor);
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "armor"), "set_armor", "get_armor");
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "armor"), "set_armor", "get_armor");
 
 	ClassDB::bind_method(D_METHOD("set_max_armor", "value"), &ArmorComponent::set_max_armor);
 	ClassDB::bind_method(D_METHOD("get_max_armor"), &ArmorComponent::get_max_armor);
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "max_armor"), "set_max_armor", "get_max_armor");
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "max_armor"), "set_max_armor", "get_max_armor");
 
 	ClassDB::bind_method(D_METHOD("set_gen_hit_delay", "value"), &ArmorComponent::set_gen_hit_delay);
 	ClassDB::bind_method(D_METHOD("get_gen_hit_delay"), &ArmorComponent::get_gen_hit_delay);
@@ -42,8 +42,8 @@ void ArmorComponent::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("damage", "amount"), &ArmorComponent::damage);
 	
 	ADD_SIGNAL(MethodInfo("armor_break"));
-	ADD_SIGNAL(MethodInfo("armor_repaired", PropertyInfo(Variant::INT, "amount")));
-	ADD_SIGNAL(MethodInfo("armor_damaged", PropertyInfo(Variant::INT, "amount")));
+	ADD_SIGNAL(MethodInfo("armor_repaired", PropertyInfo(Variant::FLOAT, "amount")));
+	ADD_SIGNAL(MethodInfo("armor_damaged", PropertyInfo(Variant::FLOAT, "amount")));
 
 	ClassDB::bind_method(D_METHOD("handle_damage", "source"), &ArmorComponent::handle_damage);
 }
@@ -70,7 +70,7 @@ void ArmorComponent::_notification(int p_what) {
 		if(gen_tick_rate > 0.0)
 			while(next_gen_tick <= 0.0) {
 				next_gen_tick += gen_tick_rate;
-				u_int64_t amount = ceil(((double) max_armor) * gen_pct);
+				double amount = ceil(((double) max_armor) * gen_pct);
 				repair(amount);
 			}
 		else {
@@ -83,7 +83,7 @@ void ArmorComponent::_notification(int p_what) {
 }
 
 void ArmorComponent::handle_damage(Ref<DamageSource> source) {
-	int64_t tanked = round(get_tank_pct() * source->get_amount());
+	double tanked = round(get_tank_pct() * source->get_amount());
 	armor -= tanked;
 	source->set_amount(source->get_amount() - tanked);
 	if(armor <= 0) {
@@ -93,21 +93,22 @@ void ArmorComponent::handle_damage(Ref<DamageSource> source) {
 	source->set_amount(source->get_amount() + tanked);
 }
 
-void ArmorComponent::set_armor(int64_t value) {
+void ArmorComponent::set_armor(double value) {
 	armor = value;
 	if(armor > max_armor) armor = max_armor;
 }
 
-int64_t ArmorComponent::get_armor() {
+double ArmorComponent::get_armor() {
 	return armor;
 }
 
-void ArmorComponent::set_max_armor(int64_t value) {
+void ArmorComponent::set_max_armor(double value) {
+	double armor_pct = get_armor_pct();
 	max_armor = value;
-	set_armor(get_armor());
+	set_armor(max_armor * armor_pct);
 }
 
-int64_t ArmorComponent::get_max_armor() {
+double ArmorComponent::get_max_armor() {
 	return max_armor;
 }
 
@@ -119,12 +120,12 @@ double ArmorComponent::get_tank_pct() {
 	return get_armor_pct() * get_armor_effeciency();
 }
 
-void ArmorComponent::repair(int64_t amount) {
+void ArmorComponent::repair(double amount) {
 	set_armor(amount + armor);
 	emit_signal("armor_repaired", amount);
 }
 
-void ArmorComponent::damage(int64_t amount) {
+void ArmorComponent::damage(double amount) {
 	set_armor(armor - amount);
 	emit_signal("armor_damaged", amount);
 }
