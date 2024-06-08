@@ -49,7 +49,9 @@ static MenuStack *MenuStackPtr = nullptr;
 void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 	if(p_level == MODULE_INITIALIZATION_LEVEL_SCENE) {
 		ClassDB::register_class<DamageSource>();
+		ClassDB::register_class<StatModifier>();
 
+		ClassDB::register_class<CharacterSpecies>();
 		ClassDB::register_class<CharacterData>();
 		ClassDB::register_class<WorldCharacter>();
 

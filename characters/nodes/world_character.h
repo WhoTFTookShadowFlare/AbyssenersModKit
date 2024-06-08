@@ -5,6 +5,7 @@
 
 #include "../resources/character_data.h"
 #include "../resources/damage_source.h"
+#include "../resources/stat_modifier.h"
 
 class WorldCharacter final : public CharacterBody3D {
 	GDCLASS(WorldCharacter, CharacterBody3D);
@@ -18,6 +19,14 @@ protected:
 	bool is_dead = false;
 	void set_is_dead(bool value);
 
+	TypedArray<StatModifier> additive_stat_modifiers;
+	TypedArray<StatModifier> multiplicitive_stat_modifiers; // Applied after additive
+
+	void apply_stat_modifier(Ref<StatModifier> modifier);
+	void unapply_stat_modifier(Ref<StatModifier> modifier);
+
+	void set_additive_stat_modifiers(TypedArray<StatModifier> modifiers);
+	void set_multiplicitive_stat_modifiers(TypedArray<StatModifier> modifiers);
 public:
 	WorldCharacter();
 
@@ -29,7 +38,15 @@ public:
 	TypedArray<Callable> get_damage_handler_queue();
 	void handle_damage(Ref<DamageSource> source);
 
-	Node *get_component(StringName type);
+	Node *get_component(String type);
+
+	bool can_have_stat_modifier(Ref<StatModifier> modifier);
+
+	void add_stat_modifier(Ref<StatModifier> modifier);
+	void remove_stat_modifier(Ref<StatModifier> modifier);
+
+	TypedArray<StatModifier> get_additive_stat_modifiers();
+	TypedArray<StatModifier> get_multiplicitive_stat_modifiers();
 };
 
 #endif // WORLD_CHARACTER_H

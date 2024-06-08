@@ -20,6 +20,18 @@ void WorldCharacter::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("on_revive"));
 
 	ClassDB::bind_method(D_METHOD("get_component", "type"), &WorldCharacter::get_component);
+
+	ClassDB::bind_method(D_METHOD("_set_additive_stat_modifiers", "modifiers"), &WorldCharacter::set_additive_stat_modifiers);
+	ClassDB::bind_method(D_METHOD("get_additive_stat_modifiers"), &WorldCharacter::get_additive_stat_modifiers);
+	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "additive_stat_modifiers"), "_set_additive_stat_modifiers", "get_additive_stat_modifiers");
+
+	ClassDB::bind_method(D_METHOD("_set_multiplicitive_stat_modifiers", "modifiers"), &WorldCharacter::set_multiplicitive_stat_modifiers);
+	ClassDB::bind_method(D_METHOD("get_multiplicitive_stat_modifiers"), &WorldCharacter::get_multiplicitive_stat_modifiers);
+	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "multiplicitive_modifiers"), "_set_multiplicitive_stat_modifiers", "get_multiplicitive_stat_modifiers");
+
+	ClassDB::bind_method(D_METHOD("can_have_stat_modifier", "modifier"), &WorldCharacter::can_have_stat_modifier);
+	ClassDB::bind_method(D_METHOD("add_stat_modifier", "modifier"), &WorldCharacter::add_stat_modifier);
+	ClassDB::bind_method(D_METHOD("remove_stat_modifier", "modifier"), &WorldCharacter::remove_stat_modifier);
 }
 
 WorldCharacter::WorldCharacter() {}
@@ -85,7 +97,7 @@ void WorldCharacter::handle_damage(Ref<DamageSource> src) {
 	if(src->get_amount() > 0) emit_signal("on_death");
 }
 
-Node *WorldCharacter::get_component(StringName type) {
+Node *WorldCharacter::get_component(String type) {
 	for(Variant child_var : get_children()) {
 		Node *child = cast_to<Node>(child_var.operator Object *());
 		if(child->get_class() == type) {
@@ -94,4 +106,99 @@ Node *WorldCharacter::get_component(StringName type) {
 	}
 
 	return nullptr;
+}
+
+bool WorldCharacter::can_have_stat_modifier(Ref<StatModifier> modifier) {
+	if(modifier.is_null()) return false;
+
+	Node *component = get_component(modifier->get_target_component());
+	if(component == nullptr) {
+		return false;
+	}
+
+	List<PropertyInfo> properties;
+	component->get_property_list(&properties);
+	for(PropertyInfo property : properties) {
+		if(property.name == modifier->get_target_property()) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void WorldCharacter::apply_stat_modifier(Ref<StatModifier> modifier) {
+	Node *comp = get_component(modifier->get_target_component());
+	if(modifier->is_multiplicitive()) {
+		comp->set(modifier->get_target_property(), comp->get(modifier->get_target_property()).operator double() * modifier->get_change());
+	} else {
+		double mul_amount = 0.0;
+		for(Variant var : multiplicitive_stat_modifiers) {
+			if(var.get_type() != Variant::OBJECT) continue;
+			Object *obj = var.operator Object *();
+			if(!obj->is_class(StatModifier::get_class_static())) continue;
+			StatModifier *existing_modifier = cast_to<StatModifier>(obj);
+			mul_amount += existing_modifier->get_change();
+		}
+		comp->set(modifier->get_target_property(), comp->get(modifier->get_target_property()).operator double() + (modifier->get_change() * mul_amount));
+	}
+}
+
+void WorldCharacter::unapply_stat_modifier(Ref<StatModifier> modifier) {
+	Node *comp = get_component(modifier->get_target_component());
+	if(modifier->is_multiplicitive()) {
+		comp->set(modifier->get_target_property(), comp->get(modifier->get_target_property()).operator double() / modifier->get_change());
+	} else {
+		double mul_amount = 0.0;
+		for(Variant var : multiplicitive_stat_modifiers) {
+			if(var.get_type() != Variant::OBJECT) continue;
+			Object *obj = var.operator Object *();
+			if(!obj->is_class(StatModifier::get_class_static())) continue;
+			StatModifier *existing_modifier = cast_to<StatModifier>(obj);
+			mul_amount += existing_modifier->get_change();
+		}
+		comp->set(modifier->get_target_property(), comp->get(modifier->get_target_property()).operator double() - (modifier->get_change() * mul_amount));
+	}
+}
+
+void WorldCharacter::add_stat_modifier(Ref<StatModifier> modifier) {
+	if(!can_have_stat_modifier(modifier)) return;
+	if(modifier->is_multiplicitive()) {
+		multiplicitive_stat_modifiers.append(modifier);
+	} else {
+		additive_stat_modifiers.append(modifier);
+	}
+	apply_stat_modifier(modifier);
+}
+
+void WorldCharacter::remove_stat_modifier(Ref<StatModifier> modifier) {
+	TypedArray<StatModifier> from;
+	if(modifier->is_multiplicitive()) from = multiplicitive_stat_modifiers;
+	else from = additive_stat_modifiers;
+	for(Variant applied_var : from) {
+		if(applied_var.get_type() != Variant::OBJECT) continue;
+		Object *applied_obj = applied_var.operator Object *();
+		if(!applied_obj->is_class(StatModifier::get_class_static())) continue;
+		StatModifier *applied = cast_to<StatModifier>(applied_obj);
+		if(!modifier->equals(applied)) continue;
+		unapply_stat_modifier(applied);
+		from.erase(applied);
+		break;
+	}
+}
+
+void WorldCharacter::set_additive_stat_modifiers(TypedArray<StatModifier> modifiers) {
+	if(additive_stat_modifiers.is_empty()) additive_stat_modifiers = modifiers;
+}
+
+TypedArray<StatModifier> WorldCharacter::get_additive_stat_modifiers() {
+	return additive_stat_modifiers.duplicate();
+}
+
+void WorldCharacter::set_multiplicitive_stat_modifiers(TypedArray<StatModifier> modifiers) {
+	if(multiplicitive_stat_modifiers.is_empty()) multiplicitive_stat_modifiers = modifiers;
+}
+
+TypedArray<StatModifier> WorldCharacter::get_multiplicitive_stat_modifiers() {
+	return multiplicitive_stat_modifiers.duplicate();
 }

@@ -5,6 +5,8 @@
 #include "core/string/ustring.h"
 #include "core/variant/typed_array.h"
 
+#include "character_species.h"
+
 class CharacterData final : public Resource {
 	GDCLASS(CharacterData, Resource);
 protected:
@@ -13,6 +15,8 @@ protected:
 	String data_path;
 
 	bool rotates_to_velo = true;
+
+	Ref<CharacterSpecies> species;
 
 public:
 	CharacterData();
@@ -25,6 +29,9 @@ public:
 
 	bool get_rotates_to_velocity();
 	void set_rotates_to_velocity(bool value);
+
+	Ref<CharacterSpecies> get_species();
+	void set_species(Ref<CharacterSpecies> value);
 };
 
 #endif // CHARACTER_DATA_H

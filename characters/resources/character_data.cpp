@@ -18,6 +18,10 @@ void CharacterData::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_rotates_to_velocity", "value"), &CharacterData::set_rotates_to_velocity);
 	ClassDB::bind_method(D_METHOD("get_rotates_to_velocity"), &CharacterData::get_rotates_to_velocity);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "rotates_to_velocity"), "set_rotates_to_velocity", "get_rotates_to_velocity");
+
+	ClassDB::bind_method(D_METHOD("set_species", "value"), &CharacterData::set_species);
+	ClassDB::bind_method(D_METHOD("get_species"), &CharacterData::get_species);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "species"), "set_species", "get_species");
 }
 
 CharacterData::CharacterData() {}
@@ -75,4 +79,16 @@ bool CharacterData::get_rotates_to_velocity() {
 
 void CharacterData::set_rotates_to_velocity(bool value) {
 	rotates_to_velo = value;
+}
+
+Ref<CharacterSpecies> CharacterData::get_species() {
+	return species;
+}
+
+void CharacterData::set_species(Ref<CharacterSpecies> value) {
+	if(species.is_valid() && !Engine::get_singleton()->is_editor_hint()) {
+		ERR_FAIL_MSG("Cannot change species outside of editor!");
+	}
+
+	species = value;
 }
