@@ -3,14 +3,14 @@
 CharacterSpecies::CharacterSpecies() {}
 
 void CharacterSpecies::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("set_sprites_dir", "value"), &CharacterSpecies::set_sprites_dir);
-	ClassDB::bind_method(D_METHOD("get_sprites_dir"), &CharacterSpecies::get_sprites_dir);
+	ClassDB::bind_method(D_METHOD("set_animations_dir", "value"), &CharacterSpecies::set_animations_dir);
+	ClassDB::bind_method(D_METHOD("get_animations_dir"), &CharacterSpecies::get_animations_dir);
 	ADD_PROPERTY(
 		PropertyInfo(
-			Variant::STRING, "sprites_dir",
+			Variant::STRING, "animations_dir",
 			PROPERTY_HINT_DIR
 		),
-		"set_sprites_dir", "get_sprites_dir"
+		"set_animations_dir", "get_animations_dir"
 	);
 
 	ClassDB::bind_method(D_METHOD("set_default_stat_modifiers", "value"), &CharacterSpecies::set_default_stat_modifiers);
@@ -25,12 +25,12 @@ void CharacterSpecies::_bind_methods() {
 	);
 }
 
-void CharacterSpecies::set_sprites_dir(String value) {
-	sprites_dir = value;
+void CharacterSpecies::set_animations_dir(String value) {
+	anims_dir = value;
 }
 
-String CharacterSpecies::get_sprites_dir() {
-	return sprites_dir;
+String CharacterSpecies::get_animations_dir() {
+	return anims_dir;
 }
 
 void CharacterSpecies::set_default_stat_modifiers(TypedArray<StatModifier> value) {

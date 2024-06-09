@@ -12,14 +12,14 @@ class CharacterSpecies : public Resource {
 protected:
 	static void _bind_methods();
 
-	String sprites_dir;
+	String anims_dir;
 
 	TypedArray<StatModifier> default_stat_modifiers;
 public:
 	CharacterSpecies();
 
-	void set_sprites_dir(String value);
-	String get_sprites_dir();
+	void set_animations_dir(String value);
+	String get_animations_dir();
 
 	void set_default_stat_modifiers(TypedArray<StatModifier> value);
 	TypedArray<StatModifier> get_default_stat_modifiers();

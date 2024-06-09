@@ -16,9 +16,17 @@ BaseCharacterGroup::BaseCharacterGroup() {
 void BaseCharacterGroup::_bind_methods() {
 	PackedStringArray can_spawn_args;
 	can_spawn_args.append("character_data");
-	ClassDB::add_virtual_method(BaseCharacterGroup::get_class_static(), MethodInfo(Variant::BOOL, "can_spawn", PropertyInfo(Variant::STRING, "character_id")), true, can_spawn_args);
+	ClassDB::add_virtual_method(BaseCharacterGroup::get_class_static(), 
+		MethodInfo(Variant::BOOL, "can_spawn",
+			PropertyInfo(
+				Variant::OBJECT, "character_data",
+				PROPERTY_HINT_RESOURCE_TYPE, CharacterData::get_class_static()
+			)
+		),
+		true, can_spawn_args
+	);
 
-	ClassDB::bind_method(D_METHOD("try_spawn_character", "character_id"), &BaseCharacterGroup::try_spawn_character);
+	ClassDB::bind_method(D_METHOD("try_spawn_character", "character_data"), &BaseCharacterGroup::try_spawn_character);
 
 	ADD_SIGNAL(MethodInfo("character_spawned", PropertyInfo(Variant::OBJECT, "world_character")));
 
@@ -26,31 +34,31 @@ void BaseCharacterGroup::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("load_characters", "load_file"), &BaseCharacterGroup::load_characters);
 }
 
-WorldCharacter *BaseCharacterGroup::try_spawn_character(String character_id) {
-	if(!FileAccess::exists("res://data/characters/" + character_id + "/data.tres")) {
-		ERR_PRINT("Missing character id " + character_id);
-		return nullptr;
-	}
-
-	Variant can_spawn_var = call("can_spawn", character_id);
-	bool can_spawn = can_spawn_var.booleanize();
-	if(!can_spawn) {
+WorldCharacter *BaseCharacterGroup::try_spawn_character(Ref<CharacterData> data) {
+	if(!call("can_spawn", data)) {
 		return nullptr;
 	}
 
 	WorldCharacter *character = memnew(WorldCharacter);
+	character->set_character_data(data);
 
-	ResourceLoader loader;
-	character->set_character_data(loader.load("res://data/characters/" + character_id + "/data.tres"));
+	for(Variant component_var : character->get_character_data()->get_required_components()) {
+		if(component_var.get_type() != Variant::STRING) continue;
+		String component_id = component_var.operator String();
+		if(!ClassDB::can_instantiate(component_id)) {
+			print_line("Cannot instance " + component_id);
+			continue;
+		}
 
-	TypedArray<Resource> components = character->get_character_data()->get_sub_resources("components");
-	for(int c_idx = 0; c_idx < components.size(); c_idx++) {
-		Resource *comp = cast_to<Resource>(components[c_idx]);
-		ERR_CONTINUE_MSG(!comp->is_class(PackedScene::get_class_static()), "Character components must be a PackedScene");
-		PackedScene *scn = cast_to<PackedScene>(comp);
-		Node *comp_node = scn->instantiate();
-		character->add_child(comp_node);
-		comp_node->set_owner(character);
+		Object *obj = ClassDB::instantiate(component_id);
+		if(!obj->is_class(Node::get_class_static())) {
+			memfree(obj);
+			continue;
+		}
+
+		Node *comp = cast_to<Node>(obj);
+		character->add_child(comp);
+		comp->set_owner(character);
 	}
 
 	add_child(character);

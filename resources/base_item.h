@@ -11,6 +11,8 @@ protected:
 	int count = 1;
 	int max_count = 1000000;
 
+	String cosmetic_sprites_dir;
+
 public:
 	BaseItem();
 
@@ -24,6 +26,9 @@ public:
 
 	void set_max_count(int value);
 	int get_max_count();
+
+	void set_cosmetic_sprites_dir(String location);
+	String get_cosmetic_sprites_dir();
 };
 
 #endif // BASE_ITEM_H

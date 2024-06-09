@@ -52,6 +52,7 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<StatModifier>();
 
 		ClassDB::register_class<CharacterSpecies>();
+		ClassDB::register_class<CharacterPatternInfo>();
 		ClassDB::register_class<CharacterData>();
 		ClassDB::register_class<WorldCharacter>();
 

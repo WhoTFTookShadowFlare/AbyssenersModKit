@@ -17,6 +17,13 @@ void BaseItem::_bind_methods() {
 
 	ClassDB::add_virtual_method(BaseItem::get_class_static(), MethodInfo(PropertyInfo(Texture2D::get_class_static()), "get_item_icon"));
 	ClassDB::add_virtual_method(BaseItem::get_class_static(), MethodInfo(Variant::NIL, "add_item_signals"));
+
+	ClassDB::bind_method(D_METHOD("set_cosmetic_sprites_dir", "location"), &BaseItem::set_cosmetic_sprites_dir);
+	ClassDB::bind_method(D_METHOD("get_cosmetic_sprites_dir"), &BaseItem::get_cosmetic_sprites_dir);
+	ADD_PROPERTY(
+		PropertyInfo(Variant::STRING, "cosmetic_sprites_dir", PROPERTY_HINT_DIR),
+		"set_cosmetic_sprites_dir", "get_cosmetic_sprites_dir"
+	);
 }
 
 bool BaseItem::should_be_removed() {
@@ -45,4 +52,12 @@ void BaseItem::set_max_count(int value) {
 
 int BaseItem::get_max_count() {
 	return max_count;
+}
+
+void BaseItem::set_cosmetic_sprites_dir(String location) {
+	cosmetic_sprites_dir = location;
+}
+
+String BaseItem::get_cosmetic_sprites_dir() {
+	return cosmetic_sprites_dir;
 }

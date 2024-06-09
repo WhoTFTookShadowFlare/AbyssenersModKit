@@ -15,7 +15,7 @@ protected:
 public:
 	BaseCharacterGroup();
 
-	WorldCharacter *try_spawn_character(String character_name);
+	WorldCharacter *try_spawn_character(Ref<CharacterData> data);
 
 	void save_characters(SaveFile *file);
 	void load_characters(SaveFile *file);

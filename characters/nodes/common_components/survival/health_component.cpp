@@ -30,7 +30,7 @@ void HealthComponent::_notification(int p_what) {
 	if(Engine::get_singleton()->is_editor_hint()) return;
 	
 	switch(p_what) {
-	case NOTIFICATION_READY: {
+	case NOTIFICATION_PARENTED: {
 		set_physics_process_internal(true);
 		
 		Node *parent = get_parent();

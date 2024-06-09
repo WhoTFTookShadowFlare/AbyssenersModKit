@@ -12,7 +12,7 @@ void AIComponent::_notification(int p_what) {
 	if(Engine::get_singleton()->is_editor_hint()) return;
 
 	switch(p_what) {
-	case NOTIFICATION_READY: {
+	case NOTIFICATION_PARENTED: {
 		Node *parent = get_parent();
 		ERR_FAIL_COND(!parent->is_class(WorldCharacter::get_class_static()));
 		character = cast_to<WorldCharacter>(parent);
