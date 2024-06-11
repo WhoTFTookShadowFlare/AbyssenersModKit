@@ -6,7 +6,7 @@
 #include "core/variant/typed_array.h"
 
 #include "character_species.h"
-#include "character_pattern_info.h"
+#include "character_layer_info.h"
 
 class CharacterData final : public Resource {
 	GDCLASS(CharacterData, Resource);
@@ -19,12 +19,8 @@ protected:
 
 	Ref<CharacterSpecies> species;
 
-	Color pri_color;
-
-	Color l_eye_color;
-	Color r_eye_color;
-
-	TypedArray<CharacterPatternInfo> patterns;
+	TypedArray<CharacterLayerInfo> parts;
+	TypedArray<CharacterLayerInfo> patterns;
 public:
 	CharacterData();
 
@@ -37,17 +33,11 @@ public:
 	Ref<CharacterSpecies> get_species();
 	void set_species(Ref<CharacterSpecies> value);
 
-	Color get_primary_color();
-	void set_primary_color(Color value);
+	TypedArray<CharacterLayerInfo> get_parts();
+	void set_parts(TypedArray<CharacterLayerInfo> value);
 
-	Color get_left_eye_color();
-	void set_left_eye_color(Color value);
-
-	Color get_right_eye_color();
-	void set_right_eye_color(Color value);
-
-	TypedArray<CharacterPatternInfo> get_patterns();
-	void set_patterns(TypedArray<CharacterPatternInfo> value);
+	TypedArray<CharacterLayerInfo> get_patterns();
+	void set_patterns(TypedArray<CharacterLayerInfo> value);
 };
 
 #endif // CHARACTER_DATA_H

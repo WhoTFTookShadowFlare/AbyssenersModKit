@@ -9,6 +9,19 @@
 
 CharacterData::CharacterData() {
 	required_components.push_back(SpriteComponent::get_class_static());
+
+	Ref<CharacterLayerInfo> base = Ref<CharacterLayerInfo>(memnew(CharacterLayerInfo));
+	base->set_layer_id("base");
+
+	Ref<CharacterLayerInfo> left_eye = Ref<CharacterLayerInfo>(memnew(CharacterLayerInfo));
+	left_eye->set_layer_id("left_eye");
+
+	Ref<CharacterLayerInfo> right_eye = Ref<CharacterLayerInfo>(memnew(CharacterLayerInfo));
+	right_eye->set_layer_id("right_eye");
+
+	parts.push_back(base);
+	parts.push_back(left_eye);
+	parts.push_back(right_eye);
 }
 
 void CharacterData::_bind_methods() {
@@ -29,25 +42,14 @@ void CharacterData::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_species"), &CharacterData::get_species);
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "species"), "set_species", "get_species");
 
-	ClassDB::bind_method(D_METHOD("set_primary_color", "value"), &CharacterData::set_primary_color);
-	ClassDB::bind_method(D_METHOD("get_primary_color"), &CharacterData::get_primary_color);
+	ClassDB::bind_method(D_METHOD("set_parts", "value"), &CharacterData::set_parts);
+	ClassDB::bind_method(D_METHOD("get_parts"), &CharacterData::get_parts);
 	ADD_PROPERTY(
-		PropertyInfo(Variant::COLOR, "primary_color"),
-		"set_primary_color", "get_primary_color"
-	);
-
-	ClassDB::bind_method(D_METHOD("set_left_eye_color", "value"), &CharacterData::set_left_eye_color);
-	ClassDB::bind_method(D_METHOD("get_left_eye_color"), &CharacterData::get_left_eye_color);
-	ADD_PROPERTY(
-		PropertyInfo(Variant::COLOR, "left_eye_color"),
-		"set_left_eye_color", "get_left_eye_color"
-	);
-
-	ClassDB::bind_method(D_METHOD("set_right_eye_color", "value"), &CharacterData::set_right_eye_color);
-	ClassDB::bind_method(D_METHOD("get_right_eye_color"), &CharacterData::get_right_eye_color);
-	ADD_PROPERTY(
-		PropertyInfo(Variant::COLOR, "right_eye_color"),
-		"set_right_eye_color", "get_right_eye_color"
+		PropertyInfo(
+			Variant::ARRAY, "parts", PROPERTY_HINT_ARRAY_TYPE,
+			String::num(Variant::OBJECT) + ":" + String::num(PROPERTY_HINT_RESOURCE_TYPE) + "/" + CharacterLayerInfo::get_class_static()
+		),
+		"set_parts", "get_parts"
 	);
 	
 	ClassDB::bind_method(D_METHOD("set_patterns", "value"), &CharacterData::set_patterns);
@@ -55,7 +57,7 @@ void CharacterData::_bind_methods() {
 	ADD_PROPERTY(
 		PropertyInfo(
 			Variant::ARRAY, "patterns", PROPERTY_HINT_ARRAY_TYPE,
-			String::num(Variant::OBJECT) + ":" + String::num(PROPERTY_HINT_RESOURCE_TYPE) + "/" + CharacterPatternInfo::get_class_static()
+			String::num(Variant::OBJECT) + ":" + String::num(PROPERTY_HINT_RESOURCE_TYPE) + "/" + CharacterLayerInfo::get_class_static()
 		),
 		"set_patterns", "get_patterns"
 	);
@@ -85,34 +87,18 @@ void CharacterData::set_species(Ref<CharacterSpecies> value) {
 	species = value;
 }
 
-Color CharacterData::get_primary_color() {
-	return pri_color;
+TypedArray<CharacterLayerInfo> CharacterData::get_parts() {
+	return parts;
 }
 
-void CharacterData::set_primary_color(Color value) {
-	pri_color = value;
+void CharacterData::set_parts(TypedArray<CharacterLayerInfo> value) {
+	parts = value;
 }
 
-Color CharacterData::get_left_eye_color() {
-	return l_eye_color;
-}
-
-void CharacterData::set_left_eye_color(Color value) {
-	l_eye_color = value;
-}
-
-Color CharacterData::get_right_eye_color() {
-	return r_eye_color;
-}
-
-void CharacterData::set_right_eye_color(Color value) {
-	r_eye_color = value;
-}
-
-TypedArray<CharacterPatternInfo> CharacterData::get_patterns() {
+TypedArray<CharacterLayerInfo> CharacterData::get_patterns() {
 	return patterns;
 }
 
-void CharacterData::set_patterns(TypedArray<CharacterPatternInfo> value) {
+void CharacterData::set_patterns(TypedArray<CharacterLayerInfo> value) {
 	patterns = value;
 }

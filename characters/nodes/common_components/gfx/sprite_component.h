@@ -18,19 +18,22 @@ protected:
 	SubViewport *render;
 	Ref<ViewportTexture> render_texture;
 
-	TypedArray<BaseItem> equiped_items;
+	TypedArray<BaseItem> equipped_items;
 
-	Node2D *char_parts;
+	Node2D *char_layers;
 	Node2D *char_equip;
 
 	Ref<CharacterData> data;
+
+	void add_layers_from_array(TypedArray<CharacterLayerInfo> layers, Ref<CharacterSpecies> species);
 public:
 	SpriteComponent();
 
-	void add_item(Ref<BaseItem> item);
-	void remove_item(Ref<BaseItem> item);
+	void set_equipped_items(TypedArray<BaseItem> items);
+	TypedArray<BaseItem> get_equipped_items();
 	void update_equipment();
 
+	void update_layers();
 };
 
 #endif // SPRITE_COMPONENT_H 
