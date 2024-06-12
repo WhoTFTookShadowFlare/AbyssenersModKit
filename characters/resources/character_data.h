@@ -21,6 +21,8 @@ protected:
 
 	TypedArray<CharacterLayerInfo> parts;
 	TypedArray<CharacterLayerInfo> patterns;
+
+	double height = 1.5;
 public:
 	CharacterData();
 
@@ -38,6 +40,9 @@ public:
 
 	TypedArray<CharacterLayerInfo> get_patterns();
 	void set_patterns(TypedArray<CharacterLayerInfo> value);
+
+	double get_height();
+	void set_height(double value);
 };
 
 #endif // CHARACTER_DATA_H

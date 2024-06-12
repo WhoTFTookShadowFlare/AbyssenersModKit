@@ -43,22 +43,7 @@ WorldCharacter *BaseCharacterGroup::try_spawn_character(Ref<CharacterData> data)
 	character->set_character_data(data);
 
 	for(Variant component_var : character->get_character_data()->get_required_components()) {
-		if(component_var.get_type() != Variant::STRING) continue;
-		String component_id = component_var.operator String();
-		if(!ClassDB::can_instantiate(component_id)) {
-			print_line("Cannot instance " + component_id);
-			continue;
-		}
-
-		Object *obj = ClassDB::instantiate(component_id);
-		if(!obj->is_class(Node::get_class_static())) {
-			memfree(obj);
-			continue;
-		}
-
-		Node *comp = cast_to<Node>(obj);
-		character->add_child(comp);
-		comp->set_owner(character);
+		character->add_component(component_var);
 	}
 
 	add_child(character);

@@ -19,6 +19,8 @@ void WorldCharacter::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("on_death"));
 	ADD_SIGNAL(MethodInfo("on_revive"));
 
+	ClassDB::bind_method(D_METHOD("add_component", "instance_str"), &WorldCharacter::add_component);
+	ClassDB::bind_method(D_METHOD("has_component", "type"), &WorldCharacter::has_component);
 	ClassDB::bind_method(D_METHOD("get_component", "type"), &WorldCharacter::get_component);
 
 	ClassDB::bind_method(D_METHOD("_set_additive_stat_modifiers", "modifiers"), &WorldCharacter::set_additive_stat_modifiers);
@@ -97,6 +99,39 @@ void WorldCharacter::handle_damage(Ref<DamageSource> src) {
 	}
 
 	if(src->get_amount() > 0) emit_signal("on_death");
+}
+
+Node *WorldCharacter::add_component(String instance_str) {
+	String comp_id = instance_str.substr(0, instance_str.find(":"));
+	ERR_FAIL_COND_V_MSG(!ClassDB::can_instantiate, nullptr, "Cannot instance " + comp_id);
+
+	Object *obj = ClassDB::instantiate(comp_id);
+	if(!obj->is_class(Node::get_class_static())) {
+		memfree(obj);
+		ERR_FAIL_V_MSG(nullptr, comp_id + " was not a Node");
+	}
+
+	Node *comp = cast_to<Node>(obj);
+	add_child(comp);
+	comp->set_owner(this);
+
+	if(instance_str.contains(":")) {
+		String prop_changes = instance_str.substr(instance_str.find(":") + 1);
+		PackedStringArray properties = prop_changes.split(",");
+		for(String property_entry : properties) {
+			ERR_CONTINUE(!property_entry.contains("="));
+			String property_name = property_entry.substr(0, property_entry.find("="));
+			String property_value = property_entry.substr(property_entry.find("=") + 1);
+
+			comp->set(property_name, property_value);
+		}
+	}
+
+	return comp;
+}
+
+bool WorldCharacter::has_component(String type) {
+	return get_component(type);
 }
 
 Node *WorldCharacter::get_component(String type) {

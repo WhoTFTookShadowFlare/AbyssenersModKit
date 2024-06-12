@@ -24,6 +24,8 @@ SpriteComponent::SpriteComponent() {
 	set_alpha_cut_mode(SpriteBase3D::ALPHA_CUT_OPAQUE_PREPASS);
 	set_draw_flag(SpriteBase3D::FLAG_SHADED, true);
 	set_texture_filter(StandardMaterial3D::TEXTURE_FILTER_NEAREST);
+
+	set_hframes(direction_count);
 }
 
 void SpriteComponent::_bind_methods() {
@@ -36,6 +38,27 @@ void SpriteComponent::_bind_methods() {
 		), "set_equipped_items", "get_equipped_items"
 	);
 
+	ClassDB::bind_method(D_METHOD("set_direction_count"), &SpriteComponent::set_direction_count);
+	ClassDB::bind_method(D_METHOD("get_direction_count"), &SpriteComponent::get_direction_count);
+	ADD_PROPERTY(
+		PropertyInfo(Variant::INT, "direction_count"),
+		"set_direction_count", "get_direction_count"
+	);
+
+	ClassDB::bind_method(D_METHOD("set_ccw_rotation"), &SpriteComponent::set_ccw_rotation);
+	ClassDB::bind_method(D_METHOD("uses_ccw_rotation"), &SpriteComponent::uses_ccw_rotation);
+	ADD_PROPERTY(
+		PropertyInfo(Variant::BOOL, "ccw_rotation"),
+		"set_ccw_rotation", "uses_ccw_rotation"
+	);
+
+	ClassDB::bind_method(D_METHOD("set_start_offset"), &SpriteComponent::set_start_offset);
+	ClassDB::bind_method(D_METHOD("get_start_offset"), &SpriteComponent::get_start_offset);
+	ADD_PROPERTY(
+		PropertyInfo(Variant::INT, "start_offset"),
+		"set_start_offset", "get_start_offset"
+	);
+
 	ClassDB::bind_method(D_METHOD("update_layers"), &SpriteComponent::update_layers);
 }
 
@@ -43,7 +66,8 @@ void SpriteComponent::_notification(int p_what) {
 	switch(p_what) {
 	case NOTIFICATION_READY: {
 		update_layers();
-	};
+		set_process_internal(true);
+	}; break;
 	case NOTIFICATION_PARENTED: {
 		Node *parent = get_parent();
 		ERR_FAIL_COND_MSG(
@@ -62,7 +86,22 @@ void SpriteComponent::_notification(int p_what) {
 			data->get_species().is_null(),
 			"CharacterData is missing a species."
 		);
-	};
+	}; break;
+	case NOTIFICATION_INTERNAL_PROCESS: {
+		Viewport *vp = get_viewport();
+		if(!vp) return;
+
+		Camera3D *cam = vp->get_camera_3d();
+		if(!cam) return;
+
+		double angle = Math::rad_to_deg(cam->get_global_rotation().y - get_global_rotation().y) * (ccw_rotation ? 1 : -1);
+
+		print_line(angle);
+
+		int sprite_idx = Math::wrapi((int) Math::round(Math::wrapf(angle + ANGLE_OFFSET, 0.0, 360.0) / ANGLE_BETWEEN) + start_offset, 0, direction_count);
+		set_frame(sprite_idx);
+
+	}; break;
 	default:
 		break;
 	}
@@ -126,4 +165,32 @@ void SpriteComponent::add_layers_from_array(TypedArray<CharacterLayerInfo> layer
 		char_layers->add_child(sprite);
 		sprite->set_name(layer->get_layer_id());
 	}
+}
+
+void SpriteComponent::set_direction_count(int value) {
+	direction_count = value;
+	set_hframes(value);
+
+	ANGLE_BETWEEN = 360.0 / direction_count;
+	ANGLE_OFFSET = ANGLE_BETWEEN / 2.0;
+}
+
+int SpriteComponent::get_direction_count() {
+	return direction_count;
+}
+
+void SpriteComponent::set_ccw_rotation(bool value) {
+	ccw_rotation = value;
+}
+
+bool SpriteComponent::uses_ccw_rotation() {
+	return ccw_rotation;
+}
+
+void SpriteComponent::set_start_offset(int value) {
+	start_offset = value;
+}
+
+int SpriteComponent::get_start_offset() {
+	return start_offset;
 }

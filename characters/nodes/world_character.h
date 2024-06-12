@@ -38,6 +38,8 @@ public:
 	TypedArray<Callable> get_damage_handler_queue();
 	void handle_damage(Ref<DamageSource> source);
 
+	Node *add_component(String instance_str);
+	bool has_component(String type);
 	Node *get_component(String type);
 
 	bool can_have_stat_modifier(Ref<StatModifier> modifier);

@@ -61,6 +61,13 @@ void CharacterData::_bind_methods() {
 		),
 		"set_patterns", "get_patterns"
 	);
+
+	ClassDB::bind_method(D_METHOD("set_height", "value"), &CharacterData::set_height);
+	ClassDB::bind_method(D_METHOD("get_height"), &CharacterData::get_height);
+	ADD_PROPERTY(
+		PropertyInfo(Variant::FLOAT, "height"),
+		"set_height", "get_height"
+	);
 }
 
 void CharacterData::set_required_components(TypedArray<String> value) {
@@ -101,4 +108,12 @@ TypedArray<CharacterLayerInfo> CharacterData::get_patterns() {
 
 void CharacterData::set_patterns(TypedArray<CharacterLayerInfo> value) {
 	patterns = value;
+}
+
+double CharacterData::get_height() {
+	return height;
+}
+
+void CharacterData::set_height(double value) {
+	height = value;
 }

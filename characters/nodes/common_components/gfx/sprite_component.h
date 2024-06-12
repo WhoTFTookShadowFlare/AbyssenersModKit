@@ -25,6 +25,13 @@ protected:
 
 	Ref<CharacterData> data;
 
+	bool ccw_rotation = false;
+	int start_offset = 0;
+
+	int direction_count = 4;
+	double ANGLE_BETWEEN = 360.0 / (float) direction_count;
+	double ANGLE_OFFSET = ANGLE_BETWEEN / 2.0;
+
 	void add_layers_from_array(TypedArray<CharacterLayerInfo> layers, Ref<CharacterSpecies> species);
 public:
 	SpriteComponent();
@@ -34,6 +41,15 @@ public:
 	void update_equipment();
 
 	void update_layers();
+
+	void set_direction_count(int value);
+	int get_direction_count();
+
+	void set_ccw_rotation(bool value);
+	bool uses_ccw_rotation();
+
+	void set_start_offset(int value);
+	int get_start_offset();
 };
 
 #endif // SPRITE_COMPONENT_H 
