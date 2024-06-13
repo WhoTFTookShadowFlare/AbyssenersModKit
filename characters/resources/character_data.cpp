@@ -68,6 +68,13 @@ void CharacterData::_bind_methods() {
 		PropertyInfo(Variant::FLOAT, "height"),
 		"set_height", "get_height"
 	);
+
+	ClassDB::bind_method(D_METHOD("set_width", "value"), &CharacterData::set_width);
+	ClassDB::bind_method(D_METHOD("get_width"), &CharacterData::get_width);
+	ADD_PROPERTY(
+		PropertyInfo(Variant::FLOAT, "width"),
+		"set_width", "get_width"
+	);
 }
 
 void CharacterData::set_required_components(TypedArray<String> value) {
@@ -116,4 +123,12 @@ double CharacterData::get_height() {
 
 void CharacterData::set_height(double value) {
 	height = value;
+}
+
+double CharacterData::get_width() {
+	return width;
+}
+
+void CharacterData::set_width(double value) {
+	width = value;
 }

@@ -96,9 +96,7 @@ void SpriteComponent::_notification(int p_what) {
 
 		double angle = Math::rad_to_deg(cam->get_global_rotation().y - get_global_rotation().y) * (ccw_rotation ? 1 : -1);
 
-		print_line(angle);
-
-		int sprite_idx = Math::wrapi((int) Math::round(Math::wrapf(angle + ANGLE_OFFSET, 0.0, 360.0) / ANGLE_BETWEEN) + start_offset, 0, direction_count);
+		int sprite_idx = Math::wrapi((int) Math::round(Math::wrapf(angle - ANGLE_OFFSET, 0.0, 360.0) / ANGLE_BETWEEN) + start_offset, 0, direction_count);
 		set_frame(sprite_idx);
 
 	}; break;

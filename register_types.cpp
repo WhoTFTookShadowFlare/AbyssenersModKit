@@ -17,6 +17,7 @@
 #include "characters/nodes/common_components/mobility/friction_component.h"
 #include "characters/nodes/common_components/mobility/gravity_component.h"
 #include "characters/nodes/common_components/mobility/pathing_component.h"
+#include "characters/nodes/common_components/mobility/collision_component.h"
 
 #include "characters/nodes/common_components/survival/armor_component.h"
 #include "characters/nodes/common_components/survival/dodge_component.h"
@@ -67,6 +68,7 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<GravityComponent>();
 		ClassDB::register_class<PathingComponent>();
 		ClassDB::register_class<FrictionComponent>();
+		ClassDB::register_class<CollisionComponent>();
 		ClassDB::register_class<LuckComponent>();
 		ClassDB::register_class<HealthComponent>();
 		ClassDB::register_class<ArmorComponent>();
