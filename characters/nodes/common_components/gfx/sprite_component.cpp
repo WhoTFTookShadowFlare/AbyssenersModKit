@@ -96,7 +96,7 @@ void SpriteComponent::_notification(int p_what) {
 
 		double angle = Math::rad_to_deg(cam->get_global_rotation().y - get_global_rotation().y) * (ccw_rotation ? 1 : -1);
 
-		int sprite_idx = Math::wrapi((int) Math::round(Math::wrapf(angle - ANGLE_OFFSET, 0.0, 360.0) / ANGLE_BETWEEN) + start_offset, 0, direction_count);
+		int sprite_idx = Math::wrapi(((int) Math::round(Math::wrapf(angle, 0.0, 360.0) / ANGLE_BETWEEN)) + start_offset, 0, direction_count);
 		set_frame(sprite_idx);
 
 	}; break;
@@ -170,7 +170,6 @@ void SpriteComponent::set_direction_count(int value) {
 	set_hframes(value);
 
 	ANGLE_BETWEEN = 360.0 / direction_count;
-	ANGLE_OFFSET = ANGLE_BETWEEN / 2.0;
 }
 
 int SpriteComponent::get_direction_count() {

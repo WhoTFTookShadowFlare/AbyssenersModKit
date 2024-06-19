@@ -30,7 +30,6 @@ protected:
 
 	int direction_count = 4;
 	double ANGLE_BETWEEN = 360.0 / (float) direction_count;
-	double ANGLE_OFFSET = ANGLE_BETWEEN / 2.0;
 
 	void add_layers_from_array(TypedArray<CharacterLayerInfo> layers, Ref<CharacterSpecies> species);
 public:
