@@ -4,13 +4,16 @@
 #include "scene/main/scene_tree.h"
 #include "scene/main/window.h"
 
+#include "resources/conditions/condition_never.h"
+
 #include "characters/nodes/character_group_manager.h"
 #include "characters/nodes/base_character_group.h"
 #include "characters/nodes/world_character.h"
 
-#include "characters/nodes/common_components/ai_component.h"
 #include "characters/nodes/common_components/inventory_component.h"
 #include "characters/nodes/common_components/luck_component.h"
+
+#include "characters/nodes/common_components/ai_component.h"
 
 #include "characters/nodes/common_components/gfx/sprite_component.h"
 
@@ -52,18 +55,22 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<DamageSource>();
 		ClassDB::register_class<StatModifier>();
 
+		ClassDB::register_class<BaseCondition>();
+		ClassDB::register_class<ConditionNever>();
+
 		ClassDB::register_class<CharacterSpecies>();
 		ClassDB::register_class<CharacterLayerInfo>();
 		ClassDB::register_class<CharacterData>();
 		ClassDB::register_class<WorldCharacter>();
 
-		ClassDB::register_class<AIComponent>();
-		ClassDB::register_class<AITask>();
-
 		ClassDB::register_class<SpriteComponent>();
 
 		ClassDB::register_class<BaseItem>();
 		ClassDB::register_class<InventoryComponent>();
+
+		ClassDB::register_class<AIGoal>();
+		ClassDB::register_class<AITree>();
+		ClassDB::register_class<AIComponent>();
 
 		ClassDB::register_class<GravityComponent>();
 		ClassDB::register_class<PathingComponent>();
