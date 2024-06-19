@@ -101,8 +101,10 @@ void WorldCharacter::handle_damage(Ref<DamageSource> src) {
 	if(src->get_amount() > 0) emit_signal("on_death");
 }
 
-Node *WorldCharacter::add_component(String instance_str) {
-	String comp_id = instance_str.substr(0, instance_str.find(":"));
+Node *WorldCharacter::add_component(Dictionary comp_dat) {
+	ERR_FAIL_COND_V_MSG(!comp_dat.has("comp_id"), nullptr, "Provided Dictionary is missing required field 'comp_id'");
+
+	String comp_id = comp_dat.get("comp_id", "");
 	ERR_FAIL_COND_V_MSG(!ClassDB::can_instantiate, nullptr, "Cannot instance " + comp_id);
 
 	Object *obj = ClassDB::instantiate(comp_id);
@@ -110,23 +112,20 @@ Node *WorldCharacter::add_component(String instance_str) {
 		memfree(obj);
 		ERR_FAIL_V_MSG(nullptr, comp_id + " was not a Node");
 	}
-
 	Node *comp = cast_to<Node>(obj);
-	add_child(comp);
-	comp->set_owner(this);
 
-	if(instance_str.contains(":")) {
-		String prop_changes = instance_str.substr(instance_str.find(":") + 1);
-		PackedStringArray properties = prop_changes.split(",");
-		for(String property_entry : properties) {
-			ERR_CONTINUE(!property_entry.contains("="));
-			String property_name = property_entry.substr(0, property_entry.find("="));
-			String property_value = property_entry.substr(property_entry.find("=") + 1);
+	Dictionary properties = comp_dat.duplicate();
+	properties.erase("comp_id");
 
-			comp->set(property_name, property_value);
-		}
+	for(Variant key : properties.keys()) {
+		ERR_CONTINUE_MSG(key.get_type() != Variant::STRING, "A key in provided Dictionary was not a String");
+
+		String prop_name = key.operator String();
+		comp->set(prop_name, properties[prop_name]);
 	}
 
+	add_child(comp);
+	comp->set_owner(this);
 	return comp;
 }
 

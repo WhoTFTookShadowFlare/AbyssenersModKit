@@ -4,6 +4,7 @@
 #include "core/io/resource.h"
 #include "core/string/ustring.h"
 #include "core/variant/typed_array.h"
+#include "core/variant/dictionary.h"
 
 #include "character_species.h"
 #include "character_layer_info.h"
@@ -15,7 +16,7 @@ protected:
 
 	bool rotates_to_velo = true;
 
-	TypedArray<String> required_components;
+	TypedArray<Dictionary> required_components;
 
 	Ref<CharacterSpecies> species;
 
@@ -27,8 +28,8 @@ protected:
 public:
 	CharacterData();
 
-	void set_required_components(TypedArray<String> value);
-	TypedArray<String> get_required_components();
+	void set_required_components(TypedArray<Dictionary> value);
+	TypedArray<Dictionary> get_required_components();
 
 	bool get_rotates_to_velocity();
 	void set_rotates_to_velocity(bool value);

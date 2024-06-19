@@ -7,22 +7,7 @@
 
 #include "../nodes/common_components/gfx/sprite_component.h"
 
-CharacterData::CharacterData() {
-	required_components.push_back(SpriteComponent::get_class_static());
-
-	Ref<CharacterLayerInfo> base = Ref<CharacterLayerInfo>(memnew(CharacterLayerInfo));
-	base->set_layer_id("base");
-
-	Ref<CharacterLayerInfo> left_eye = Ref<CharacterLayerInfo>(memnew(CharacterLayerInfo));
-	left_eye->set_layer_id("left_eye");
-
-	Ref<CharacterLayerInfo> right_eye = Ref<CharacterLayerInfo>(memnew(CharacterLayerInfo));
-	right_eye->set_layer_id("right_eye");
-
-	parts.push_back(base);
-	parts.push_back(left_eye);
-	parts.push_back(right_eye);
-}
+CharacterData::CharacterData() {}
 
 void CharacterData::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_rotates_to_velocity", "value"), &CharacterData::set_rotates_to_velocity);
@@ -33,7 +18,7 @@ void CharacterData::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_required_components"), &CharacterData::get_required_components);
 	ADD_PROPERTY(PropertyInfo(
 			Variant::ARRAY, "required_components", PROPERTY_HINT_ARRAY_TYPE,
-			String::num(Variant::STRING) + ":"
+			String::num(Variant::DICTIONARY) + ":" + String::num(PROPERTY_HINT_TYPE_STRING)
 		),
 		"set_required_components", "get_required_components"
 	);
@@ -77,11 +62,11 @@ void CharacterData::_bind_methods() {
 	);
 }
 
-void CharacterData::set_required_components(TypedArray<String> value) {
+void CharacterData::set_required_components(TypedArray<Dictionary> value) {
 	required_components = value;
 }
 
-TypedArray<String> CharacterData::get_required_components() {
+TypedArray<Dictionary> CharacterData::get_required_components() {
 	return required_components;
 }
 

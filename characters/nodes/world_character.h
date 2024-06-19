@@ -3,6 +3,8 @@
 
 #include "scene/3d/physics/character_body_3d.h"
 
+#include "core/variant/dictionary.h"
+
 #include "../resources/character_data.h"
 #include "../resources/damage_source.h"
 #include "../resources/stat_modifier.h"
@@ -38,7 +40,7 @@ public:
 	TypedArray<Callable> get_damage_handler_queue();
 	void handle_damage(Ref<DamageSource> source);
 
-	Node *add_component(String instance_str);
+	Node *add_component(Dictionary instance_str);
 	bool has_component(String type);
 	Node *get_component(String type);
 
