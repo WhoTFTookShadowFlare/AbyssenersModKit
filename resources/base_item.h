@@ -29,6 +29,8 @@ public:
 
 	void set_cosmetic_sprites_dir(String location);
 	String get_cosmetic_sprites_dir();
+
+	TypedArray<String> get_item_signal_names();
 };
 
 #endif // BASE_ITEM_H

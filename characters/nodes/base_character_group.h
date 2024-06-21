@@ -19,6 +19,8 @@ public:
 
 	void save_characters(SaveFile *file);
 	void load_characters(SaveFile *file);
+
+	TypedArray<WorldCharacter> get_characters();
 };
 
 #endif // BASE_CHARACTER_GROUP_H

@@ -2,6 +2,8 @@
 
 #include "scene/resources/texture.h"
 
+#include "../characters/nodes/world_character.h"
+
 BaseItem::BaseItem() {}
 
 void BaseItem::_bind_methods() {
@@ -16,7 +18,15 @@ void BaseItem::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "max_count"), "set_max_count", "get_max_count");
 
 	ClassDB::add_virtual_method(BaseItem::get_class_static(), MethodInfo(PropertyInfo(Texture2D::get_class_static()), "get_item_icon"));
-	ClassDB::add_virtual_method(BaseItem::get_class_static(), MethodInfo(Variant::NIL, "add_item_signals"));
+	ClassDB::add_virtual_method(
+		BaseItem::get_class_static(),
+		MethodInfo(
+			PropertyInfo(
+				Variant::ARRAY, "ret", PROPERTY_HINT_ARRAY_TYPE,
+				String::num(Variant::STRING) + ":"
+			), "get_custom_item_signal_names"
+		)
+	);
 
 	ClassDB::bind_method(D_METHOD("set_cosmetic_sprites_dir", "location"), &BaseItem::set_cosmetic_sprites_dir);
 	ClassDB::bind_method(D_METHOD("get_cosmetic_sprites_dir"), &BaseItem::get_cosmetic_sprites_dir);
@@ -24,6 +34,16 @@ void BaseItem::_bind_methods() {
 		PropertyInfo(Variant::STRING, "cosmetic_sprites_dir", PROPERTY_HINT_DIR),
 		"set_cosmetic_sprites_dir", "get_cosmetic_sprites_dir"
 	);
+
+	ADD_SIGNAL(MethodInfo(
+		Variant::NIL, "on_consume",
+		PropertyInfo(
+			Variant::OBJECT, "who",
+			PROPERTY_HINT_NODE_TYPE, WorldCharacter::get_class_static()
+		)
+	));
+
+	ClassDB::bind_method(D_METHOD("get_item_signal_names"), &BaseItem::get_item_signal_names);
 }
 
 bool BaseItem::should_be_removed() {
@@ -60,4 +80,22 @@ void BaseItem::set_cosmetic_sprites_dir(String location) {
 
 String BaseItem::get_cosmetic_sprites_dir() {
 	return cosmetic_sprites_dir;
+}
+
+TypedArray<String> BaseItem::get_item_signal_names() {
+	TypedArray<String> signals;
+	
+	Variant res = call("get_custom_item_signals");
+	if(res.get_type() == Variant::ARRAY) {
+		Array arr = res.operator Array();
+		for(Variant var : arr) {
+			if(var.get_type() == Variant::STRING) {
+				signals.push_back(var.operator String());
+			}
+		}
+	}
+
+	signals.push_back("on_consume");
+
+	return signals;
 }

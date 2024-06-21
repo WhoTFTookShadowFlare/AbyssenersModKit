@@ -16,7 +16,7 @@ protected:
 
 	TypedArray<BaseItem> contents;
 
-	int item_limit;
+	int item_limit = 30;
 
 public:
 	InventoryComponent();

@@ -32,6 +32,8 @@ void BaseCharacterGroup::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("save_characters", "save_file"), &BaseCharacterGroup::save_characters);
 	ClassDB::bind_method(D_METHOD("load_characters", "load_file"), &BaseCharacterGroup::load_characters);
+
+	ClassDB::bind_method(D_METHOD("get_characters"), &BaseCharacterGroup::get_characters);
 }
 
 WorldCharacter *BaseCharacterGroup::try_spawn_character(Ref<CharacterData> data) {
@@ -82,4 +84,14 @@ void BaseCharacterGroup::load_characters(SaveFile *file) {
 		add_child(character_node);
 		emit_signal("character_spawned", character_node);
 	}
+}
+
+TypedArray<WorldCharacter> BaseCharacterGroup::get_characters() {
+	TypedArray<WorldCharacter> characters;
+	for(int c_idx = 0; c_idx < get_child_count(); c_idx++) {
+		Node *child = get_child(c_idx);
+		ERR_CONTINUE(!child->is_class(WorldCharacter::get_class_static()));
+		characters.push_back(cast_to<WorldCharacter>(child));
+	}
+	return characters;
 }

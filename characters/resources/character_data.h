@@ -1,6 +1,9 @@
 #ifndef CHARACTER_DATA_H
 #define CHARACTER_DATA_H
 
+#include "scene/main/viewport.h"
+#include "scene/2d/node_2d.h"
+
 #include "core/io/resource.h"
 #include "core/string/ustring.h"
 #include "core/variant/typed_array.h"
@@ -13,6 +16,7 @@ class CharacterData final : public Resource {
 	GDCLASS(CharacterData, Resource);
 protected:
 	static void _bind_methods();
+	Node2D *add_char_sprites_to(TypedArray<CharacterLayerInfo> layers, String anim_name);
 
 	bool rotates_to_velo = true;
 
@@ -48,6 +52,9 @@ public:
 
 	double get_width();
 	void set_width(double value);
+
+	SubViewport *get_talk_sprite(String expression);
+	SubViewport *get_char_icon();
 };
 
 #endif // CHARACTER_DATA_H

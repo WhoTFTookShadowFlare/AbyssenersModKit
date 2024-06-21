@@ -1,9 +1,10 @@
+#include "character_data.h"
+
 #include "core/config/engine.h"
 #include "core/io/dir_access.h"
 #include "core/string/string_builder.h"
 #include "core/io/resource_loader.h"
-
-#include "character_data.h"
+#include "scene/2d/animated_sprite_2d.h"
 
 #include "../nodes/common_components/gfx/sprite_component.h"
 
@@ -60,6 +61,9 @@ void CharacterData::_bind_methods() {
 		PropertyInfo(Variant::FLOAT, "width"),
 		"set_width", "get_width"
 	);
+
+	ClassDB::bind_method(D_METHOD("get_talk_sprite"), &CharacterData::get_talk_sprite);
+	ClassDB::bind_method(D_METHOD("get_char_icon"), &CharacterData::get_char_icon);
 }
 
 void CharacterData::set_required_components(TypedArray<Dictionary> value) {
@@ -116,4 +120,55 @@ double CharacterData::get_width() {
 
 void CharacterData::set_width(double value) {
 	width = value;
+}
+
+Node2D *CharacterData::add_char_sprites_to(TypedArray<CharacterLayerInfo> layers, String anim_name) {
+	ERR_FAIL_COND_V_MSG(species.is_null(), nullptr, "No species provided to generate sprite for");
+
+	Node2D *sprites = memnew(Node2D);
+	for(Variant var : layers) {
+		if(var.get_type() != Variant::OBJECT) continue;
+		Object *obj = var.operator Object *();
+		if(!obj->is_class(CharacterLayerInfo::get_class_static())) continue;
+		CharacterLayerInfo *layer_info = cast_to<CharacterLayerInfo>(obj);
+
+		Ref<SpriteFrames> species_anim_data = species->get_animation_data();
+
+		AnimatedSprite2D *layer_spr = memnew(AnimatedSprite2D);
+		layer_spr->set_sprite_frames(species_anim_data);
+		layer_spr->set_modulate(layer_info->get_layer_color());
+		layer_spr->set_centered(false);
+
+		if(species_anim_data->has_animation(layer_info->get_layer_id() + ':' + anim_name))
+			layer_spr->set_animation(layer_info->get_layer_id() + ':' + anim_name);
+		else
+			layer_spr->set_visible(false);
+		
+		sprites->add_child(layer_spr);
+		layer_spr->set_name(layer_info->get_layer_id());
+	}
+	return sprites;
+}
+
+SubViewport *CharacterData::get_talk_sprite(String expression) {
+	ERR_FAIL_COND_V_MSG(species.is_null(), nullptr, "A CharacterData does not have a CharacterSpecies");
+	
+	Node2D *base_spr = add_char_sprites_to(parts, "talk." + expression);
+	Node2D *layer_spr = add_char_sprites_to(patterns, "talk." + expression);
+
+	ERR_FAIL_COND_V_MSG(base_spr == nullptr, nullptr, "Failed to generate talk sprite");
+
+	SubViewport *sprite = memnew(SubViewport);
+	sprite->set_size(Vector2i(16, 16));
+	sprite->set_transparent_background(true);
+	sprite->set_disable_3d(true);
+	sprite->set_default_canvas_item_texture_filter(Viewport::DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST);
+	
+	sprite->add_child(base_spr);
+	sprite->add_child(layer_spr);
+	return sprite;
+}
+
+SubViewport *CharacterData::get_char_icon() {
+	return get_talk_sprite("happy");
 }
