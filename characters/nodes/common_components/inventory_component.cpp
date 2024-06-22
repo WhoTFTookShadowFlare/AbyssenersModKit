@@ -76,11 +76,19 @@ void InventoryComponent::remove_item(Ref<Script> item_type) {
 bool InventoryComponent::filter_fn(Variant entry) {
 	if(!entry.is_ref_counted()) return false;
 	if(!(entry.operator Object *())->is_class(BaseItem::get_class_static())) return false;
-	return cast_to<BaseItem>(entry.operator Object *())->get_count() > 0;
+	int count = cast_to<BaseItem>(entry.operator Object *())->get_count();
+	return count > 0;
 }
 
 void InventoryComponent::clean_empty() {
-	contents.filter(Callable(this, "filter_fn"));
+	Array items = contents.filter(Callable(this, "filter_fn"));
+	contents.clear();
+	for(Variant var : items) {
+		ERR_CONTINUE(var.get_type() != Variant::OBJECT);
+		Object *obj = var.operator Object *();
+		ERR_CONTINUE(!obj->is_class(BaseItem::get_class_static()));
+		contents.push_back(cast_to<BaseItem>(obj));
+	}
 	emit_signal("inventory_updated");
 }
 
