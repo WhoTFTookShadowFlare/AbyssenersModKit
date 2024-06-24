@@ -19,6 +19,7 @@ public:
 	static MenuStack *get_singleton();
 
 	void add_layer(BaseMenuLayer *layer);
+	void remove_top_layer();
 
 	MainMenu *add_main_menu();
 };

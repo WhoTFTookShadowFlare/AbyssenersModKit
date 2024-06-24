@@ -14,7 +14,8 @@ protected:
 	HBoxContainer *content;
 
 	void _configure_content_item(Control *item);
-
+	void _enable_entries();
+	void _disable_entries();
 public:
 	MainMenu();
 
