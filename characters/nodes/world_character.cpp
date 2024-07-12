@@ -2,6 +2,8 @@
 
 #include "world_character.h"
 
+#include "../resources/damage_source.h"
+
 void WorldCharacter::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_character_data", "data"), &WorldCharacter::set_character_data);
 	ClassDB::bind_method(D_METHOD("get_character_data"), &WorldCharacter::get_character_data);

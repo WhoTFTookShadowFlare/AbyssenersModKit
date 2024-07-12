@@ -4,10 +4,10 @@
 #include "core/io/resource.h"
 #include "core/string/ustring.h"
 #include "core/variant/typed_array.h"
+#include "scene/resources/sprite_frames.h"
 
 #include "stat_modifier.h"
-
-#include "scene/resources/sprite_frames.h"
+#include "../../resources/base_item.h"
 
 class CharacterSpecies : public Resource {
 	GDCLASS(CharacterSpecies, Resource);
@@ -18,6 +18,8 @@ protected:
 	Ref<SpriteFrames> animation_data;
 
 	TypedArray<StatModifier> default_stat_modifiers;
+
+	Ref<BaseItem> default_weapon;
 public:
 	CharacterSpecies();
 
@@ -28,6 +30,9 @@ public:
 	TypedArray<StatModifier> get_default_stat_modifiers();
 
 	Ref<SpriteFrames> get_animation_data();
+
+	void set_default_weapon(Ref<BaseItem> item);
+	Ref<BaseItem> get_default_weapon();
 };
 
 #endif // CHARACTER_SPECIES_H

@@ -5,6 +5,8 @@
 #include "core/variant/typed_array.h"
 #include "core/string/string_name.h"
 
+class WorldCharacter;
+
 class DamageSource : public Resource {
 	GDCLASS(DamageSource, Resource);
 protected:
@@ -14,6 +16,7 @@ protected:
 
 	TypedArray<StringName> flags;
 
+	NodePath causing_char_path;
 public:
 	DamageSource();
 
@@ -27,6 +30,9 @@ public:
 
 	void set_flags(TypedArray<StringName> value);
 	TypedArray<StringName> get_flags();
+
+	void set_causing_char(WorldCharacter *value);
+	WorldCharacter *get_causing_char();
 };
 
 #endif // DAMAGE_SOURCE_H

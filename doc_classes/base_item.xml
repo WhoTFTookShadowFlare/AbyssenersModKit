@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="BaseItem" inherits="Resource">
+	<brief_description>
+		It is an item that characters use as equipment or for consumption.
+	</brief_description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_projectile" qualifiers="virtual">
+			<return type="Projectile" />
+			<param index="0" name="who" type="WorldCharacter" />
+			<description>
+				Creates and returns a projectile for the given character.
+			</description>
+		</method>
+	</methods>
+</class>

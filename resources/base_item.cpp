@@ -4,6 +4,8 @@
 
 #include "../characters/nodes/world_character.h"
 
+#include "../projectiles/nodes/projectile.h"
+
 BaseItem::BaseItem() {}
 
 void BaseItem::_bind_methods() {
@@ -44,6 +46,20 @@ void BaseItem::_bind_methods() {
 	));
 
 	ClassDB::bind_method(D_METHOD("get_item_signal_names"), &BaseItem::get_item_signal_names);
+
+	ClassDB::add_virtual_method(get_class_static(), 
+		MethodInfo(
+			PropertyInfo(
+				Variant::OBJECT, "projectile",
+				PROPERTY_HINT_RESOURCE_TYPE, Projectile::get_class_static()
+			),
+			"get_projectile",
+			PropertyInfo(
+				Variant::OBJECT, "who",
+				PROPERTY_HINT_RESOURCE_TYPE, WorldCharacter::get_class_static()
+			)
+		)
+	);
 }
 
 bool BaseItem::should_be_removed() {
@@ -56,6 +72,14 @@ bool BaseItem::can_merge_with(Ref<BaseItem> other) {
 
 bool BaseItem::is_max_count() {
 	return count >= max_count;
+}
+
+void BaseItem::set_weight(float value) {
+	weight = MIN(0.0, value);
+}
+
+float BaseItem::get_weight() {
+	return weight;
 }
 
 void BaseItem::set_count(int value) {

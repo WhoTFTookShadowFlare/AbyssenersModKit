@@ -8,6 +8,8 @@ class BaseItem : public Resource {
 protected:
 	static void _bind_methods();
 	
+	float weight = 0.0;
+
 	int count = 1;
 	int max_count = 1000000;
 
@@ -23,6 +25,9 @@ public:
 
 	void set_count(int value);
 	int get_count() const;
+
+	void set_weight(float value);
+	float get_weight();
 
 	void set_max_count(int value);
 	int get_max_count();

@@ -6,8 +6,9 @@
 #include "core/variant/dictionary.h"
 
 #include "../resources/character_data.h"
-#include "../resources/damage_source.h"
 #include "../resources/stat_modifier.h"
+
+class DamageSource;
 
 class WorldCharacter final : public CharacterBody3D {
 	GDCLASS(WorldCharacter, CharacterBody3D);

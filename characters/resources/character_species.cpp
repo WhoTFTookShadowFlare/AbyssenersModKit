@@ -28,6 +28,16 @@ void CharacterSpecies::_bind_methods() {
 	);
 
 	ClassDB::bind_method(D_METHOD("get_animation_data"), &CharacterSpecies::get_animation_data);
+
+	ClassDB::bind_method(D_METHOD("set_default_weapon", "value"), &CharacterSpecies::set_default_weapon);
+	ClassDB::bind_method(D_METHOD("get_default_weapon"), &CharacterSpecies::get_default_weapon);
+	ADD_PROPERTY(
+		PropertyInfo(
+			Variant::OBJECT, "default_weapon",
+			PROPERTY_HINT_RESOURCE_TYPE, BaseItem::get_class_static()
+		),
+		"set_default_weapon", "get_default_weapon"
+	);
 }
 
 void CharacterSpecies::set_animations_dir(String value) {
@@ -90,4 +100,12 @@ Ref<SpriteFrames> CharacterSpecies::get_animation_data() {
 	}
 
 	return animation_data;
+}
+
+void CharacterSpecies::set_default_weapon(Ref<BaseItem> item) {
+	default_weapon = item;
+}
+
+Ref<BaseItem> CharacterSpecies::get_default_weapon() {
+	return default_weapon;
 }

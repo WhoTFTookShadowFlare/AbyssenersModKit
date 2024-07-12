@@ -17,21 +17,21 @@
 		</method>
 		<method name="has_mod">
 			<return type="bool" />
-			<param index=0 name="mod_id" type="String" />
+			<param index="0" name="mod_id" type="String" />
 			<description>
 				Returns true if the mod exists, but not if it has loaded.
 			</description>
 		</method>
 		<method name="is_mod_loaded">
 			<return type="bool" />
-			<param index=0 name="mod_id" type="String" />
+			<param index="0" name="mod_id" type="String" />
 			<description>
 				Returns true if the mod is loaded.
 			</description>
 		</method>
 		<method name="get_mod_init">
 			<return type="ModInit" />
-			<param index=0 name="mod_id" type="String" />
+			<param index="0" name="mod_id" type="String" />
 			<description>
 				Returns the ModInit of a given ID.
 			</description>

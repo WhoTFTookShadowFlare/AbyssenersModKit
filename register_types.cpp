@@ -26,6 +26,11 @@
 #include "characters/nodes/common_components/survival/dodge_component.h"
 #include "characters/nodes/common_components/survival/health_component.h"
 
+#include "characters/nodes/common_components/combat/attack_component.h"
+
+#include "projectiles/nodes/projectile_manager.h"
+#include "projectiles/nodes/common_components/follow_character_component.h"
+
 #include "resources/base_item.h"
 
 #include "menu/base_menu_layer.h"
@@ -47,6 +52,7 @@ static ModLoader* ModLoaderPtr = nullptr;
 static SaveManager *SaveManagerPtr = nullptr;
 static CurrentScene *CurrentScenePtr = nullptr;
 static CharacterGroupManager *CharacterGroupManagerPtr = nullptr;
+static ProjectileManager *ProjectileManagerPtr = nullptr;
 static GameCamera *GameCameraPtr = nullptr;
 static MenuStack *MenuStackPtr = nullptr;
 
@@ -57,6 +63,9 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 
 		ClassDB::register_class<BaseCondition>();
 		ClassDB::register_class<ConditionNever>();
+
+		ClassDB::register_class<Projectile>();
+		ClassDB::register_class<FollowCharacterComponent>();
 
 		ClassDB::register_class<CharacterSpecies>();
 		ClassDB::register_class<CharacterLayerInfo>();
@@ -80,6 +89,7 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<HealthComponent>();
 		ClassDB::register_class<ArmorComponent>();
 		ClassDB::register_class<DodgeComponent>();
+		ClassDB::register_class<AttackComponent>();
 
 		ClassDB::register_class<BaseCharacterGroup>();
 		ClassDB::register_class<BaseMenuLayer>();
@@ -105,6 +115,11 @@ void initialize_abysseners_mod_kit_module(ModuleInitializationLevel p_level) {
 		CharacterGroupManagerPtr = memnew(CharacterGroupManager);
 		Engine::get_singleton()->add_singleton(Engine::Singleton("CharacterGroupManager", CharacterGroupManager::get_singleton()));
 		CharacterGroupManager::get_singleton()->call_deferred("_setup");
+
+		ClassDB::register_class<ProjectileManager>();
+		ProjectileManagerPtr = memnew(ProjectileManager);
+		Engine::get_singleton()->add_singleton(Engine::Singleton("ProjectileManager", ProjectileManager::get_singleton()));
+		ProjectileManager::get_singleton()->call_deferred("_setup");
 
 		ClassDB::register_class<CameraModifier>();
 		ClassDB::register_class<GameCamera>();

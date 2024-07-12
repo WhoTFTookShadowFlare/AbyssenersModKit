@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="CharacterData" inherits="Node">
 	<brief_description>
-		Defines a character when put in "res://data/characters"
+		Defines a character.
 	</brief_description>
 	<tutorials>
 	</tutorials>
@@ -20,7 +20,7 @@
 		</method>
 		<method name="get_sub_resources">
 			<return type="Array[Resource]" />
-			<param index=0 name="sub_resource_id" type="String" />
+			<param index="0" name="sub_resource_id" type="String" />
 			<description>
 				Returns sub resources for the character.
 			</description>
